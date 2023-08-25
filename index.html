@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+Ground: https://cainos.itch.io/pixel-art-platformer-village-props
+Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
+Cloud: https://latenightcoffe.itch.io/2d-pixel-art-semi-realistic-clouds
+  -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Number Knight</title>
+    <link href="./favicon.png" rel="icon shortcut" />
+    <link href="./style.css" rel="stylesheet" />
+    <style id="s"></style>
+  </head>
+  <body data-section="title">
+    <button type="button" id="soundButton"></button>
+    <section id="title">
+      <dialog id="titleDialog" open>
+        <form method="dialog">
+          <h1 class="title">Number Knight</h1>
+          <button class="button">Play <small>with sound</small></button>
+          <button class="button" value="no-sound">
+            Play <small>without sound</small>
+          </button>
+        </form>
+      </dialog>
+    </section>
+    <section id="menu">
+      <dialog id="menuDialog" open>
+        <form method="dialog">
+          <h2 class="title">Choose a level</h2>
+          <nav id="levelList"></nav>
+        </form>
+      </dialog>
+    </section>
+    <section id="game">
+      <aside data-tuto="0">
+        <p>Welcome to <strong>Number Knight</strong>!</p>
+        <p>Your goal is to conquer towers by fighting monsters.</p>
+        <p>Click on this little blob to kill it!</p>
+      </aside>
+
+      <aside data-tuto="1">
+        <p>Well done! When you kill a monster, you gain its power.</p>
+        <p>
+          In order to win a fight, you must have <strong>more</strong> power
+          than your target: if you have the same power, you'll lose!
+        </p>
+      </aside>
+
+      <aside data-tuto="3">
+        <p>Oh, some elementary blobs!</p>
+        <p>
+          The last one is powerfull with its 100 of power... But don't worry:
+          when you kill a monster, you absorb its element and your
+          <strong>next</strong> attack will use it.
+        </p>
+        <p>
+          <span class="element plant">Plant</span> monsters are weak against
+          <span class="element fire">fire</span> attacks: your power will count
+          <strong>twice</strong> againt this green blob!
+        </p>
+      </aside>
+
+      <aside data-tuto="4">
+        <p>
+          Don't forget: the element is available only for your
+          <strong>next</strong> attack.
+        </p>
+      </aside>
+
+      <aside data-tuto="5">
+        <p>
+          If you fight en elementary monster with a weaker element, your power
+          will be divided by two for this duel.
+        </p>
+        <p>
+          <strong
+            >You start this level with
+            <span class="element fire">fire</span> element</strong
+          >, which is weak against <span class="element water">water</span>...
+        </p>
+      </aside>
+
+      <aside data-tuto="6">
+        <p>
+          There're three elements: <span class="element fire">fire</span>,
+          <span class="element water">water</span> and
+          <span class="element plant">plant</span>.
+        </p>
+        <p>Each has a weakness and resistance:</p>
+
+        <table>
+          <tr>
+            <th></th>
+            <th><span class="element fire">fire</span> target</th>
+            <th><span class="element water">water</span> target</th>
+            <th><span class="element plant">plant</span> target</th>
+          </tr>
+          <tr>
+            <th><span class="element fire">fire</span> attack</th>
+            <td>x1</td>
+            <td>/2</td>
+            <td>x2</td>
+          </tr>
+          <tr>
+            <th><span class="element water">water</span> attack</th>
+            <td>x2</td>
+            <td>x1</td>
+            <td>/2</td>
+          </tr>
+          <tr>
+            <th><span class="element plant">plant</span> attack</th>
+            <td>/2</td>
+            <td>x2</td>
+            <td>x1</td>
+          </tr>
+        </table>
+      </aside>
+
+      <aside data-tuto="9">
+        <p>
+          Hm, beware of these skeletons...
+          <br />When you kill them, you don't gain their power... You
+          <strong>lose</strong> it!
+        </p>
+      </aside>
+
+      <aside data-tuto="11">
+        <p>Like blobs, skeletons can be attached to some element.</p>
+      </aside>
+
+      <aside data-tuto="12">
+        <p>If your own power reaches 0 or below, <strong>you die</strong>!</p>
+      </aside>
+
+      <aside data-tuto="13">
+        <p>
+          These wizards have strange magic...
+          <br />When you kill them, you gain their power...
+          <strong>but the other monsters in the same tower gain it too!</strong>
+        </p>
+      </aside>
+
+      <aside data-tuto="16">
+        <p>What about elementary wizards?</p>
+      </aside>
+
+      <aside data-tuto="19">
+        <p>
+          Oh! Potions!<br />
+          You can't lose againts potions: you simply drink them and your power
+          is modified according to their value.
+        </p>
+      </aside>
+
+      <aside data-tuto="20">
+        <p>Well... You still can die if your power reached 0 or below...</p>
+      </aside>
+
+      <aside data-tuto="21">
+        <p>
+          Potions can also contain some elements! When you drink them, their
+          effect is multiplied or divided by two according to the same rules
+          applied to monsters,
+          <strong>whether the potion effect is positive or negative!</strong>
+        </p>
+        <p>
+          It is not <em>that</em> intuitive, so try to guess your next power
+          before drinking potions on this level.
+        </p>
+      </aside>
+
+      <dialog id="gameOverDialog">
+        <form method="dialog">
+          <p>
+            <span>T</span><span>o</span><span>o</span> <span>b</span
+            ><span>a</span><span>d</span><span>!</span>
+          </p>
+          <button class="button">Retry</button>
+        </form>
+      </dialog>
+      <dialog id="endLevelDialog">
+        <form method="dialog">
+          <p>Congrats!</p>
+          <button class="button">Next</button>
+        </form>
+      </dialog>
+      <div id="c" class="tower-container"></div>
+    </section>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
