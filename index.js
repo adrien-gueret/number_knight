@@ -604,21 +604,11 @@ function generateLevel(towers) {
       let floorValue;
       let elementDom = null;
 
-      if (typeof floor === "number") {
-        floorValue = floor;
-      } else {
-        floorValue = floor.value;
+      floorValue = floor.value;
 
-        if (floor.element) {
-          towerFloor.dataset.element = floor.element;
-        }
-
-        if (floor.sign) {
-          towerFloor.dataset.sign = floor.sign;
-        }
-      }
-
-      towerFloor.dataset.value = floorValue;
+      ["element", "sign", "value"].forEach(
+        (prop) => floor[prop] && (towerFloor.dataset[prop] = floor[prop])
+      );
 
       if (!isFirstTower) {
         towerFloor.classList.add(floor.type ?? "blob");
