@@ -551,16 +551,15 @@ function decodeLevel(levelString) {
     const towerFloors = towerString.split(floorsSeparator);
 
     return towerFloors.map((floorString) => {
-      let value, stringValue, sign;
+      const sign = ["+", "-", "x", "/"].includes(floorString[0])
+        ? floorString[0]
+        : null;
+      const value = Number.parseInt(
+        sign ? floorString.substring(1) : floorString,
+        10
+      );
 
-      if (["+", "-", "x", "/"].includes(floorString[0])) {
-        sign = floorString[0];
-        value = Number.parseInt(floorString.substring(1), 10);
-        stringValue = value;
-      } else {
-        value = Number.parseInt(floorString, 10);
-        stringValue = String(value);
-      }
+      const stringValue = String(value);
 
       const tower = { value, sign };
 
