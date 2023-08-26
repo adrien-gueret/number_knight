@@ -400,24 +400,15 @@ function attackTowerFloor(e) {
               playerValue = playerValue - value;
             } else if (isPotion) {
               const modifierValue = value * multipler;
-              switch (floor.dataset.sign) {
-                case "+":
-                  playerValue += modifierValue;
-                  break;
 
-                case "-":
-                  playerValue -= modifierValue;
-                  break;
-
-                case "x":
-                  playerValue *= modifierValue;
-                  break;
-
-                case "/":
-                  playerValue /= modifierValue;
-                  break;
-              }
-              playerValue = Math.floor(playerValue);
+              playerValue = Math.floor(
+                {
+                  "+": playerValue + modifierValue,
+                  "-": playerValue - modifierValue,
+                  x: playerValue * modifierValue,
+                  "/": playerValue / modifierValue,
+                }[floor.dataset.sign]
+              );
             } else {
               playerValue += value;
             }
