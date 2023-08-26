@@ -169,17 +169,20 @@ Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
 
       <dialog id="gameOverDialog">
         <form method="dialog">
-          <p>
-            <span>T</span><span>o</span><span>o</span> <span>b</span
-            ><span>a</span><span>d</span><span>!</span>
-          </p>
+          <p class="title split">Too bad!</p>
           <button class="button">Retry</button>
         </form>
       </dialog>
       <dialog id="endLevelDialog">
         <form method="dialog">
-          <p>Congrats!</p>
-          <button class="button">Next</button>
+          <p class="title">Congrats!</p>
+          <p id="gameEndMessage" class="split">
+            You've finished all the levels, you're the best!
+          </p>
+          <button class="button">
+            <span class="next">Next</span>
+            <span class="menu">Menu</span>
+          </button>
         </form>
       </dialog>
       <div id="c" class="tower-container"></div>

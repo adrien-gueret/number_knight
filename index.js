@@ -13,6 +13,19 @@ styleSheet.insertRule(
   styleSheet.cssRules.length
 );
 
+for (let text of document.querySelectorAll(".split")) {
+  text.innerHTML = `<span>${text.textContent
+    .trim()
+    .split("")
+    .join("</span><span>")}</span>`.replaceAll(/ /g, "&nbsp;");
+
+  let i = 0;
+
+  for (let letter of text.querySelectorAll("span")) {
+    letter.style.animationDelay = `${i++ * 10}ms`;
+  }
+}
+
 const levels = [
   "10t5",
   "5t3_5",
@@ -38,6 +51,7 @@ const levels = [
   "100pt+5mat-10mat/2mpt+5mat+100mftx2ma",
   "10t10f_5a_+10mpt-6mf_10wp_10sat+10mf_70f_20wf",
   "4t+6mf_+6ma_+6mp_10wft+80pm_100w_+80amt-500m",
+  "5t7_3",
 ];
 
 const t = (i, n) => (n - i) / n;
@@ -238,18 +252,18 @@ function isAttackSuccess(ennemyValue, ennemyElement) {
   return value > ennemyValue;
 }
 
-gameOverDialog.addEventListener("close", (e) => {
+gameOverDialog.addEventListener("close", () => {
   goToLevel(currentLevelIndex);
 });
 
-endLevelDialog.addEventListener("close", (e) => {
-  goToLevel(currentLevelIndex + 1);
+endLevelDialog.addEventListener("close", () => {
+  const nextIndex = currentLevelIndex + 1;
+  if (levels[nextIndex]) {
+    goToLevel(nextIndex);
+  } else {
+    window.location.reload();
+  }
 });
-
-let i = 0;
-for (let letter of gameOverDialog.querySelectorAll("span")) {
-  letter.style.animationDelay = `${i++ * 10}ms`;
-}
 
 function gameOver() {
   document.body.classList.add("gameover");
@@ -421,12 +435,27 @@ function attackTowerFloor(e) {
 
             if (!isLastFloor) {
               if (is("wizard")) {
-                for (let floor of tower.querySelectorAll(".tower-floor")) {
-                  const newFloorValue = Number(floor.dataset.value) + value;
-                  floor.dataset.value = newFloorValue;
-                  floor.querySelector(".floor-value").innerHTML = `${
-                    floor.dataset.sign ?? ""
-                  }${newFloorValue}`;
+                for (let uFloor of tower.querySelectorAll(".tower-floor")) {
+                  if (uFloor === floor) {
+                    continue;
+                  }
+
+                  const uFloorSign = uFloor.dataset.sign;
+                  const uFloorValue = uFloor.dataset.value;
+
+                  const newFloorValue =
+                    value + Number(uFloorValue) * (uFloorSign === "-" ? -1 : 1);
+
+                  const absNewFloorValue = Math.abs(newFloorValue);
+
+                  if (uFloorSign === "-" && newFloorValue >= 0) {
+                    uFloor.dataset.sign = "+";
+                  }
+
+                  uFloor.dataset.value = absNewFloorValue;
+                  uFloor.querySelector(".floor-value").innerHTML = `${
+                    uFloor.dataset.sign ?? ""
+                  }${absNewFloorValue}`;
                 }
               }
 
@@ -497,6 +526,10 @@ function attackTowerFloor(e) {
                   document.body.classList.add("walking");
                   floor.querySelector(".floor-value").style.visibility =
                     "hidden";
+
+                  const isGameEnd = currentLevelIndex === levels.length - 1;
+
+                  endLevelDialog.classList.toggle("end", isGameEnd);
                   endLevelDialog.showModal();
                 }, 500);
               } else {

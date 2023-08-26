@@ -13,7 +13,7 @@ body {
   background-repeat: repeat-x, repeat-x, repeat-x, no-repeat;
   background-attachment: scroll, scroll, scroll, fixed;
   background-position: var(--scrollX) bottom, calc(var(--scrollX) / 2) bottom,
-    calc(var(--scrollX) / 4 + 550px) calc(100% - 100px), top center;
+    calc(var(--scrollX) / 3) calc(100% - 100px), top center;
   background-size: 32px, auto, auto, auto;
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
@@ -352,24 +352,24 @@ dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-dialog p,
-dialog .title {
+dialog .title,
+#gameEndMessage {
   font-size: 5rem;
   text-transform: uppercase;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
-  color: brown;
+  color: #000;
   text-shadow: 4px 0 #fff, -4px 0 #fff, 0 4px #fff, 0 -4px #fff, 3px 0 #fff,
     -3px 0 #fff, 0 3px #fff, 0 -3px #fff, 2px 2px #fff, -2px -2px #fff,
     2px -2px #fff, -2px 2px #fff;
 }
 
-dialog .title {
-  color: #000;
+#gameOverDialog .title {
+  color: #e84537;
 }
 
-#endLevelDialog p,
-dialog span {
+#endLevelDialog .title,
+dialog p span {
   --init-y: -100vh;
   transform: translateY(var(--init-y));
   animation: gameOverLetter 800ms cubic-bezier(0.29, 0.76, 0.56, 1.33) 1;
@@ -377,9 +377,31 @@ dialog span {
   display: inline-block;
 }
 
-#endLevelDialog p {
+#endLevelDialog .title {
   color: #1f976a;
   display: block;
+}
+
+#endLevelDialog .button span {
+  display: none;
+}
+
+#endLevelDialog.end .menu,
+#endLevelDialog:not(.end) .next {
+  display: inline-block;
+}
+
+#endLevelDialog:not(.end) #gameEndMessage {
+  display: none;
+}
+
+#endLevelDialog.end .title {
+  margin: 0;
+}
+
+#gameEndMessage span {
+  font-size: 3rem;
+  animation: dancing 850ms ease-in-out infinite;
 }
 
 #titleDialog form {
@@ -545,6 +567,14 @@ aside td {
   dialog p {
     font-size: 3rem;
   }
+
+  #gameEndMessage {
+    text-align: left;
+  }
+
+  #gameEndMessage span {
+    font-size: 2rem;
+  }
 }
 
 @media screen and (max-height: 500px) {
@@ -561,6 +591,14 @@ aside td {
   dialog .title,
   dialog p {
     font-size: 3rem;
+  }
+
+  #gameEndMessage {
+    text-align: left;
+  }
+
+  #gameEndMessage span {
+    font-size: 2rem;
   }
 
   #titleDialog form {
@@ -637,5 +675,19 @@ aside td {
 
   88.8% {
     transform: skew(-0.1953125deg);
+  }
+}
+
+@keyframes dancing {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0);
   }
 }
