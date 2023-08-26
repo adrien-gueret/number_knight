@@ -37,7 +37,7 @@ const levels = [
   "10t-10m_+1mt-20m_+30m_-100m_+200m",
   "100pt+5mat-10mat/2mpt+5mat+100mftx2ma",
   "10t10f_5a_+10mpt-6mf_10wp_10sat+10mf_70f_20wf",
-  "5t+5mf_+5ma_+5mp_10wft-200mf",
+  "4t+6mf_+6ma_+6mp_10wft+80pm_100w_+80amt-500m",
 ];
 
 const t = (i, n) => (n - i) / n;
@@ -432,7 +432,9 @@ function attackTowerFloor(e) {
                 for (let floor of tower.querySelectorAll(".tower-floor")) {
                   const newFloorValue = Number(floor.dataset.value) + value;
                   floor.dataset.value = newFloorValue;
-                  floor.querySelector(".floor-value").innerHTML = newFloorValue;
+                  floor.querySelector(".floor-value").innerHTML = `${
+                    floor.dataset.sign ?? ""
+                  }${newFloorValue}`;
                 }
               }
 
