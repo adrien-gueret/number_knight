@@ -346,7 +346,10 @@ function attackTowerFloor(e) {
   isAttacking = true;
 
   const floor = e.target;
-  const isPotion = floor.classList.contains("potion");
+
+  const is = (type) => floor.classList.contains(type);
+
+  const isPotion = is("potion");
   const value = Number(floor.dataset.value);
   const element = floor.dataset.element;
 
@@ -396,9 +399,7 @@ function attackTowerFloor(e) {
               return;
             }
 
-            if (floor.classList.contains("skeleton")) {
-              playerValue = playerValue - value;
-            } else if (isPotion) {
+            if (isPotion) {
               const modifierValue = value * multipler;
 
               playerValue = Math.floor(
@@ -410,7 +411,7 @@ function attackTowerFloor(e) {
                 }[floor.dataset.sign]
               );
             } else {
-              playerValue += value;
+              playerValue += value * (is("skeleton") ? -1 : 1);
             }
 
             playerValueDom.innerHTML = playerValue;
@@ -419,7 +420,7 @@ function attackTowerFloor(e) {
             const isLastFloor = tower.childNodes.length === 1;
 
             if (!isLastFloor) {
-              if (floor.classList.contains("wizard")) {
+              if (is("wizard")) {
                 for (let floor of tower.querySelectorAll(".tower-floor")) {
                   const newFloorValue = Number(floor.dataset.value) + value;
                   floor.dataset.value = newFloorValue;
