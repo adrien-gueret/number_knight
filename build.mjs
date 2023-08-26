@@ -38,7 +38,6 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
     .replaceAll("front.svg", "f.svg")
     .replaceAll("back.svg", "b.svg")
     .replaceAll("sprites.png", "s.png")
-    .replaceAll("top_tower.png", "tt.png")
     .replaceAll("tower.png", "t.png")
 
     .replaceAll("tower-container", "t-c")
@@ -95,7 +94,6 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
   fs.cpSync("./front.svg", "./entry/f.svg");
   fs.cpSync("./back.svg", "./entry/b.svg");
   fs.cpSync("./sprites.png", "./entry/s.png");
-  fs.cpSync("./top_tower.png", "./entry/tt.png");
   fs.cpSync("./tower.png", "./entry/t.png");
 
   fs.writeFileSync(
