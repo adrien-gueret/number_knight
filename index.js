@@ -13,6 +13,8 @@ styleSheet.insertRule(
   styleSheet.cssRules.length
 );
 
+let isCustomLevel = false;
+
 for (let text of document.querySelectorAll(".split")) {
   text.innerHTML = `<span>${text.textContent
     .trim()
@@ -52,7 +54,7 @@ const levels = [
   "100ft+5mpt-10mpt/2mft+10matx2mftx2mat/2mft119",
   "10t10f_5a_+10mpt-6mf_10wp_10sat+10m_70_20w",
   "4t+6mf_+6ma_+6mp_10wft100w_+80pm_+80amt-500m",
-  "5t7_3",
+  "999t1",
 ];
 
 const t = (i, n) => (n - i) / n;
@@ -679,9 +681,13 @@ function getLastReachedLevel() {
 }
 
 function goToLevel(levelIndex) {
-  currentLevelIndex = levelIndex;
-
   document.body.classList.remove("walking");
+
+  if (!Number.isInteger(levelIndex)) {
+    generateLevel(decodeLevel(levelIndex));
+    return;
+  }
+  currentLevelIndex = levelIndex;
   document.body.dataset.tuto = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
@@ -699,19 +705,22 @@ document.body.addEventListener("keydown", (e) => {
 function startGame(levelIndex) {
   document.body.classList.add("walking");
 
-  document.body.addEventListener(
-    "transitionend",
-    (e) => {
-      document.body.style.display = "none";
-      document.body.offsetHeight;
-      document.body.style.display = "block";
+  const start = () => {
+    document.body.style.display = "none";
+    document.body.offsetHeight;
+    document.body.style.display = "block";
 
-      document.body.dataset.section = "game";
+    document.body.dataset.section = "game";
 
-      goToLevel(levelIndex);
-    },
-    { once: true }
-  );
+    goToLevel(levelIndex);
+  };
+
+  if (isCustomLevel) {
+    start();
+    return;
+  }
+
+  document.body.addEventListener("transitionend", start, { once: true });
 }
 
 titleDialog.addEventListener("close", (e) => {
@@ -745,3 +754,9 @@ titleDialog.addEventListener("close", (e) => {
     document.body.dataset.section = "menu";
   }
 });
+
+if (window.location.hash) {
+  isCustomLevel = true;
+  document.body.classList.add("custom");
+  startGame(window.location.hash.substring(1));
+}
