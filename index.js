@@ -48,7 +48,7 @@ const levels = [
   "8ft4a_2sf_3wpt4p_8wa_10sft9a_18wf_9_9pt230f",
   "1t+20mt-10mt11_x2m",
   "10t-10m_+1mt-20m_+30m_-100m_+200m",
-  "100pt+5mat-10mat/2mpt+5mat+100mftx2ma",
+  "100ft+5mpt-10mpt/2mft+10matx2mftx2mat/2mft119",
   "10t10f_5a_+10mpt-6mf_10wp_10sat+10mf_70f_20wf",
   "4t+6mf_+6ma_+6mp_10wft+80pm_100w_+80amt-500m",
   "5t7_3",
@@ -222,7 +222,9 @@ let currentLevelIndex,
   playerDom,
   isAttacking = false;
 
-function getMultipler(ennemyElement) {
+function getMultipler(ennemyElement, potionSign) {
+  const isNegativePotion = ["-", "/"].includes(potionSign);
+
   const playerElement = playerDom.parentNode.dataset.element;
 
   if (!ennemyElement || !playerElement) {
@@ -236,11 +238,11 @@ function getMultipler(ennemyElement) {
   };
 
   if (typesAdvantages[playerElement] === ennemyElement) {
-    return 2;
+    return isNegativePotion ? 0.5 : 2;
   }
 
   if (typesAdvantages[ennemyElement] === playerElement) {
-    return 0.5;
+    return isNegativePotion ? 2 : 0.5;
   }
 
   return 1;
@@ -380,7 +382,7 @@ function attackTowerFloor(e) {
         [90, 180, 270, 0][Math.floor(value * Math.random() * 100) % 4] + "deg"
       );
 
-      const multipler = getMultipler(element);
+      const multipler = getMultipler(element, floor.dataset.sign);
 
       let hitMultipler;
 
