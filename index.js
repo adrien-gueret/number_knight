@@ -200,7 +200,7 @@ function playBackgroundMusic() {
     const backgroundMusicOscillator = audioContext.createOscillator();
     backgroundMusicOscillators.push(backgroundMusicOscillator);
 
-    backgroundMusicOscillator.type = "sawtooth";
+    backgroundMusicOscillator.type = "sine";
     backgroundMusicOscillator.connect(gainNode);
     backgroundMusicOscillator.onended =
       soundsEnabled && i === trackLength - 1 ? playBackgroundMusic : null;
