@@ -47,13 +47,16 @@ body {
   margin: 0 24px;
   flex-shrink: 0;
 }
+.tower::before,
+.tower-floor {
+  width: 144px;
+  position: relative;
+  background-image: url(tower.png);
+}
 .tower::before {
   content: "";
   display: block;
-  width: 144px;
   height: 38px;
-  background-image: url(tower.png);
-  position: relative;
   background-position: top;
 }
 .tower.destroying-floor::before {
@@ -61,13 +64,10 @@ body {
 }
 .tower-floor {
   display: flex;
-  position: relative;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 144px;
   height: 144px;
-  background-image: url(tower.png);
   background-position: bottom;
   background-repeat: no-repeat;
   pointer-events: none;

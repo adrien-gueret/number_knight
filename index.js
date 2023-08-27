@@ -302,18 +302,14 @@ function explodeTowerFloor(floor) {
       piece.style.setProperty("--initialX", `${x}px`);
       piece.style.setProperty("--initialY", `${y}px`);
 
-      floor.appendChild(piece);
+      floor.append(piece);
 
       const v = rand(80, 50),
         angle = rand(80, 89),
         theta = (angle * Math.PI) / 180,
         g = -9.8;
 
-      let t = 0,
-        z,
-        r,
-        nx,
-        ny;
+      let t = 0;
 
       const negate = [1, -1, 0],
         direction = negate[Math.floor(Math.random() * negate.length)];
@@ -361,9 +357,7 @@ function attackTowerFloor(e) {
 
   const floor = e.target;
 
-  const is = (type) => floor.classList.contains(type);
-
-  const isPotion = is("potion");
+  const isPotion = floor.classList.contains("potion");
   const value = Number(floor.dataset.value);
   const element = floor.dataset.element;
 
@@ -425,7 +419,8 @@ function attackTowerFloor(e) {
                 }[floor.dataset.sign]
               );
             } else {
-              playerValue += value * (is("skeleton") ? -1 : 1);
+              playerValue +=
+                value * (floor.classList.contains("skeleton") ? -1 : 1);
             }
 
             playerValueDom.innerHTML = playerValue;
@@ -434,7 +429,7 @@ function attackTowerFloor(e) {
             const isLastFloor = tower.childNodes.length === 1;
 
             if (!isLastFloor) {
-              if (is("wizard")) {
+              if (floor.classList.contains("wizard")) {
                 for (let uFloor of tower.querySelectorAll(".tower-floor")) {
                   if (uFloor === floor) {
                     continue;
@@ -496,8 +491,7 @@ function attackTowerFloor(e) {
               tower.classList.add("current");
               floor.tabIndex = -1;
               playerDom.style.removeProperty("transform");
-              floor.appendChild(playerValueDom);
-              floor.appendChild(playerDom);
+              floor.append(playerValueDom, playerDom);
               floor.blur();
 
               if (playerValue <= 0) {
@@ -551,10 +545,10 @@ function attackTowerFloor(e) {
       });
 
       playSound(isPotion ? drinkSound : hitSound);
-      playerDom.appendChild(hit);
+      playerDom.append(hit);
 
       if (hitMultipler) {
-        playerDom.appendChild(hitMultipler);
+        playerDom.append(hitMultipler);
       }
     },
     { once: true }
@@ -650,18 +644,18 @@ function generateLevel(towers) {
       const floorValueDom = document.createElement("div");
       floorValueDom.innerHTML = `${floor.sign ?? ""}${floorValue}`;
       floorValueDom.className = "floor-value";
-      towerFloor.appendChild(floorValueDom);
-      tower.appendChild(towerFloor);
+      towerFloor.append(floorValueDom);
+      tower.append(towerFloor);
 
       const character = document.createElement("div");
       character.className = "character";
       character.style.animationDelay =
         Math.random() * 100 * (towerIndex + 1) * (floorIndex + 1) + "ms";
 
-      towerFloor.appendChild(character);
+      towerFloor.append(character);
 
       if (elementDom) {
-        towerFloor.appendChild(elementDom);
+        towerFloor.append(elementDom);
       }
 
       if (isFirstTower) {
@@ -673,7 +667,7 @@ function generateLevel(towers) {
       towerFloor.addEventListener("click", attackTowerFloor);
     });
 
-    c.appendChild(tower);
+    c.append(tower);
   });
 }
 
@@ -740,10 +734,10 @@ titleDialog.addEventListener("close", (e) => {
         link.disabled = true;
       }
 
-      menuFragment.appendChild(link);
+      menuFragment.append(link);
     }
 
-    levelList.appendChild(menuFragment);
+    levelList.append(menuFragment);
 
     document.body.dataset.section = "menu";
   }
