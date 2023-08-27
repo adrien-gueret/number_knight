@@ -394,13 +394,12 @@ dialog p span {
 #endLevelDialog:not(.end) #gameEndMessage {
   display: none;
 }
-
-#endLevelDialog.end .title {
-  margin: 0;
+#endLevelDialog.custom #gameEndMessage {
+  display: none;
 }
 
-.custom #endLevelDialog button {
-  display: none;
+#endLevelDialog.end:not(.custom) .title {
+  margin: 0;
 }
 
 #gameEndMessage span {

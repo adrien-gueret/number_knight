@@ -266,6 +266,7 @@ endLevelDialog.addEventListener("close", () => {
   if (levels[nextIndex]) {
     goToLevel(nextIndex);
   } else {
+    window.location.hash = "";
     window.location.reload();
   }
 });
@@ -509,10 +510,13 @@ function attackTowerFloor(e) {
               if (nextTower === null) {
                 window.setTimeout(() => {
                   const lastLevel = getLastReachedLevel();
-                  localStorage.setItem(
-                    "number-knight-last-level",
-                    Math.max(lastLevel, currentLevelIndex + 1)
-                  );
+
+                  if (!isCustomLevel) {
+                    localStorage.setItem(
+                      "number-knight-last-level",
+                      Math.max(lastLevel, currentLevelIndex + 1)
+                    );
+                  }
 
                   playSound(winSound);
                   floor.querySelector(".character").addEventListener(
@@ -528,7 +532,11 @@ function attackTowerFloor(e) {
 
                   const isGameEnd = currentLevelIndex === levels.length - 1;
 
-                  endLevelDialog.classList.toggle("end", isGameEnd);
+                  endLevelDialog.classList.toggle(
+                    "end",
+                    isGameEnd || isCustomLevel
+                  );
+                  endLevelDialog.classList.toggle("custom", isCustomLevel);
                   endLevelDialog.showModal();
                 }, 500);
               } else {
@@ -682,12 +690,13 @@ function getLastReachedLevel() {
 
 function goToLevel(levelIndex) {
   document.body.classList.remove("walking");
+  currentLevelIndex = levelIndex;
 
   if (!Number.isInteger(levelIndex)) {
     generateLevel(decodeLevel(levelIndex));
     return;
   }
-  currentLevelIndex = levelIndex;
+
   document.body.dataset.tuto = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
@@ -757,6 +766,7 @@ titleDialog.addEventListener("close", (e) => {
 
 if (window.location.hash) {
   isCustomLevel = true;
-  document.body.classList.add("custom");
   startGame(window.location.hash.substring(1));
 }
+
+window.onhashchange = () => window.location.reload();
