@@ -300,58 +300,62 @@ function explodeTowerFloor(floor) {
   const totalPieces = amount * amount;
   let totalDestroyed = 0;
 
-  for (let x = 0; x < towerSize; x += pieceSize) {
-    for (let y = 0; y < towerSize; y += pieceSize) {
-      const piece = document.createElement("div");
-      piece.className = "tower-floor destroying piece";
+  return new Promise((resolve) => {
+    for (let x = 0; x < towerSize; x += pieceSize) {
+      for (let y = 0; y < towerSize; y += pieceSize) {
+        const piece = document.createElement("div");
+        piece.className = "tower-floor destroying piece";
 
-      piece.style.setProperty("--initialX", `${x}px`);
-      piece.style.setProperty("--initialY", `${y}px`);
+        piece.style.setProperty("--initialX", `${x}px`);
+        piece.style.setProperty("--initialY", `${y}px`);
 
-      floor.append(piece);
+        floor.append(piece);
 
-      const v = rand(80, 50),
-        angle = rand(80, 89),
-        theta = (angle * Math.PI) / 180,
-        g = -9.8;
+        const v = rand(80, 50),
+          angle = rand(80, 89),
+          theta = (angle * Math.PI) / 180,
+          g = -9.8;
 
-      let t = 0;
+        let t = 0;
 
-      const negate = [1, -1, 0],
-        direction = negate[Math.floor(Math.random() * negate.length)];
+        const negate = [1, -1, 0],
+          direction = negate[Math.floor(Math.random() * negate.length)];
 
-      const randSkew = rand(-5, 10),
-        randScale = rand(9, 11) / 10,
-        randDeg = rand(30, 5);
+        const randSkew = rand(-5, 10),
+          randScale = rand(9, 11) / 10,
+          randDeg = rand(30, 5);
 
-      piece.style.transform = `translateX(var(--x)) translateY(var(--y)) scale(${randScale}) skew(${randSkew}deg) rotateZ(${randDeg}deg)`;
+        piece.style.transform = `translateX(var(--x)) translateY(var(--y)) scale(${randScale}) skew(${randSkew}deg) rotateZ(${randDeg}deg)`;
 
-      const timer = window.setInterval(() => {
-        const ux = Math.cos(theta) * v * direction;
-        const uy = Math.sin(theta) * v - -g * t;
+        const timer = window.setInterval(() => {
+          const ux = Math.cos(theta) * v * direction;
+          const uy = Math.sin(theta) * v - -g * t;
 
-        const nx = ux * t;
-        const ny = uy * t + 0.5 * g * Math.pow(t, 2);
+          const nx = ux * t;
+          const ny = uy * t + 0.5 * g * Math.pow(t, 2);
 
-        window.requestAnimationFrame(() => {
-          piece.style.setProperty("--x", nx + "px");
-          piece.style.setProperty("--y", -ny + "px");
-        });
+          window.requestAnimationFrame(() => {
+            piece.style.setProperty("--x", nx + "px");
+            piece.style.setProperty("--y", -ny + "px");
+          });
 
-        t += 0.1;
+          t += 0.1;
 
-        if (ny < -30) {
-          clearInterval(timer);
-          piece.remove();
+          if (ny < -30) {
+            clearInterval(timer);
+            piece.remove();
 
-          if (++totalDestroyed >= totalPieces) {
-            floor.parentNode.classList.remove("destroying-floor");
-            floor.remove();
+            if (++totalDestroyed >= totalPieces) {
+              const tower = floor.parentNode;
+              tower.classList.remove("destroying-floor");
+              floor.remove();
+              resolve(tower);
+            }
           }
-        }
-      }, 10);
+        }, 10);
+      }
     }
-  }
+  });
 }
 
 function attackTowerFloor(e) {
@@ -571,10 +575,10 @@ function attackTowerFloor(e) {
   playerDom.style.transform = `scale(4) translate(${x}px, ${y}px)`;
 }
 
-function decodeLevel(levelString) {
-  const towersSeparator = "t";
-  const floorsSeparator = "_";
+const towersSeparator = "t";
+const floorsSeparator = "_";
 
+function decodeLevel(levelString) {
   const towers = levelString.split(towersSeparator);
 
   const modifiersMap = {
@@ -733,6 +737,14 @@ function startGame(levelIndex) {
 }
 
 titleDialog.addEventListener("close", (e) => {
+  if (e.target.returnValue === "editor") {
+    createFloor(createTower());
+    createTower();
+    updateEditorUICode();
+    document.body.dataset.section = "editor";
+    return;
+  }
+
   const lastReachedLevel = getLastReachedLevel();
 
   toggleSound(e.target.returnValue !== "no-sound");
@@ -763,6 +775,185 @@ titleDialog.addEventListener("close", (e) => {
     document.body.dataset.section = "menu";
   }
 });
+
+const isSign = (t) => ["+", "-", "/", "*", "x"].includes(t);
+
+ce.onbeforeinput = (e) => {
+  const isInputAllowed = [
+    "deleteContentBackward",
+    "deleteContentForward",
+  ].includes(e.inputType);
+
+  if (
+    isInputAllowed ||
+    (e.inputType === "insertText" &&
+      ((e.target.className === "value" &&
+        Number.isInteger(parseInt(e.data, 10))) ||
+        (e.target.className === "sign" && isSign(e.data))))
+  ) {
+    return;
+  }
+
+  e.preventDefault();
+  e.stopPropagation();
+};
+
+const getCustomLevelCode = () => {
+  const modifiersMap = {
+    plant: "p",
+    water: "a",
+    fire: "f",
+    blob: "b",
+    skeleton: "s",
+    wizard: "w",
+    potion: "m",
+  };
+
+  const towers = [];
+
+  for (let tower of ce.querySelectorAll(".tower")) {
+    const floors = [];
+
+    for (let floor of tower.querySelectorAll(".tower-floor")) {
+      if (
+        floor.classList.contains("ghost") ||
+        floor.classList.contains("destroying")
+      ) {
+        continue;
+      }
+      let floorCode = "";
+
+      if (floor.classList.contains("potion")) {
+        floorCode += floor.dataset.sign;
+      }
+      console.log(floor);
+      const nodeValue =
+        floor.querySelector(".floor-value .value") ||
+        floor.querySelector(".floor-value");
+
+      floorCode += nodeValue.textContent;
+
+      modifiersMap[floor.dataset.element] &&
+        (floorCode += modifiersMap[floor.dataset.element]);
+
+      modifiersMap[floor.dataset.type] &&
+        (floorCode += modifiersMap[floor.dataset.type]);
+
+      floors.push(floorCode);
+    }
+
+    if (floors.length) {
+      towers.push(floors.join(floorsSeparator));
+    }
+  }
+  return towers.join(towersSeparator);
+};
+
+const updateEditorUICode = () => {
+  cu.value = `${document.location.origin}${
+    document.location.pathname
+  }#${getCustomLevelCode()}`;
+  ca.href = cu.value;
+};
+
+const formatValue = (domNode) => {
+  if (domNode.classList.contains("value")) {
+    domNode.textContent = Math.max(
+      1,
+      Math.min(999999, Number(domNode.textContent))
+    );
+  } else if (domNode.className === "sign") {
+    const newSign =
+      (domNode.textContent[0] === "*" ? "x" : domNode.textContent[0]) || "+";
+
+    domNode.parentNode.parentNode.dataset.sign = newSign;
+    domNode.textContent = newSign;
+  }
+  updateEditorUICode();
+};
+
+ce.oninput = (e) => {
+  !["deleteContentBackward", "deleteContentForward"].includes(e.inputType) &&
+    formatValue(e.target);
+};
+
+ce.addEventListener("blur", (e) => formatValue(e.target), true);
+
+ce.onkeydown = (e) => {
+  if (!e.target.classList.contains("value")) {
+    return;
+  }
+
+  const value = Number(e.target.textContent);
+
+  const delta = { ArrowUp: 1, ArrowDown: -1 }[e.key];
+
+  if (delta) {
+    e.target.textContent = value + delta;
+    formatValue(e.target);
+  }
+};
+
+const createTower = () => {
+  const tower = document.createElement("div");
+  tower.className = "tower";
+  tower.innerHTML = `<div role="button" tabindex="1" class="tower-floor ghost"><div class="floor-value">+</div></div>`;
+  ce.append(tower);
+  return tower;
+};
+
+const createFloor = (tower) => {
+  const floor = document.createElement("div");
+  floor.dataset.element = "none";
+  floor.dataset.type = "blob";
+  floor.dataset.sign = "+";
+  floor.className = "tower-floor blob";
+  floor.innerHTML = `<button class="d">❌</button><div class="floor-value"><span class="sign" contenteditable>+</span><span class="value" contenteditable>10</span></div><div role="button" tabindex="1" class="character"></div><div role="button" tabindex="1" class="element none">♦️</div>`;
+  tower.firstChild.after(floor);
+};
+
+ce.onclick = (e) => {
+  if (e.target.classList.contains("d")) {
+    explodeTowerFloor(e.target.parentNode).then((tower) => {
+      tower.children.length === 1 && tower.remove();
+      updateEditorUICode();
+    });
+    return;
+  }
+
+  if (e.target.classList.contains("element")) {
+    const elements = ["none", "fire", "water", "plant"];
+    const nextElement =
+      elements[elements.indexOf(e.target.parentNode.dataset.element) + 1] ||
+      "none";
+    e.target.parentNode.dataset.element = nextElement;
+    e.target.className = "element " + nextElement;
+    updateEditorUICode();
+    return;
+  }
+
+  if (e.target.classList.contains("character")) {
+    const types = ["blob", "skeleton", "wizard", "potion"];
+    const nextType =
+      types[types.indexOf(e.target.parentNode.dataset.type) + 1] || "blob";
+    e.target.parentNode.dataset.type = nextType;
+    e.target.parentNode.className = "tower-floor " + nextType;
+    updateEditorUICode();
+    return;
+  }
+
+  if (!e.target.classList.contains("ghost")) {
+    return;
+  }
+
+  createFloor(e.target.parentNode);
+
+  if (!e.target.parentNode.nextSibling) {
+    createTower();
+  }
+
+  updateEditorUICode();
+};
 
 if (window.location.hash) {
   isCustomLevel = true;

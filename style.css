@@ -59,6 +59,44 @@ body {
   height: 38px;
   background-position: top;
 }
+#editor .tower:not(.current)::before,
+.tower-floor.ghost {
+  filter: grayscale(1) brightness(2);
+  pointer-events: all;
+  cursor: pointer;
+}
+#editor .tower-floor.ghost .floor-value {
+  font-size: 5rem;
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.d {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: none;
+  border: 0;
+  pointer-events: all;
+  cursor: pointer;
+  background: #fff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  padding: 0;
+  line-height: 20px;
+  border-radius: 6px;
+  opacity: 0.8;
+  z-index: 10;
+}
+.d:hover,
+.d:focus-visible {
+  opacity: 1;
+}
+.tower-floor.ghost:hover,
+.tower-floor.ghost:focus-visible {
+  filter: sepia(0.5);
+}
 .tower.destroying-floor::before {
   top: 144px;
 }
@@ -87,11 +125,6 @@ body {
   top: var(--initialY);
   background-position: calc(var(--initialX) * -1) calc(var(--initialY) * -1);
   z-index: 30;
-}
-
-.tower-floor.destroying .character,
-.tower-floor.destroying .floor-value {
-  display: none;
 }
 
 body[data-section="title"]::after,
@@ -133,7 +166,9 @@ body[data-section="menu"]::after {
 }
 
 .element,
-body:not(.walking) .tower-floor:not(.destroying)[data-element]::after {
+body:not(.walking)
+  section:not(#editor)
+  .tower-floor:not(.destroying)[data-element]::after {
   content: "";
   display: block;
   width: 15px;
@@ -144,9 +179,10 @@ body:not(.walking) .tower-floor:not(.destroying)[data-element]::after {
   background-image: url(sprites.png);
   transform: scale(2);
   z-index: 1;
+  color: transparent;
 }
 
-.element {
+section:not(#editor) .element {
   position: relative;
   vertical-align: middle;
   display: inline-block;
@@ -182,6 +218,27 @@ body:not(.walking) .tower-floor:not(.destroying)[data-element]::after {
 .tower-floor:not(.destroying)[data-element="water"]::after {
   background-position: -46px -48px !important;
   background-color: #0099db;
+}
+
+.element.none {
+  background-image: none;
+  background-color: #8c9ab3;
+  color: #3f2631;
+  border: 1px solid #3f2631;
+  text-align: center;
+  line-height: 14px;
+  box-sizing: border-box;
+}
+
+#editor .element,
+#editor .tower:not(.current) .character {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+#editor .element:hover,
+#editor .tower:not(.current) .character:hover {
+  box-shadow: inset 0 0 2px white;
 }
 
 .tower.current [data-element] .character .hit {
@@ -312,11 +369,30 @@ body.walking[data-section="menu"]::after {
   top: 16px;
 }
 
-.tower.current .floor-value {
+.tower.current .floor-value,
+#editor .floor-value {
   opacity: 1;
 }
 
+#editor .tower-floor:not(.destroying, .ghost) .floor-value {
+  pointer-events: all;
+  min-width: 48px;
+  min-height: 66px;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+}
+
+#editor .floor-value span {
+  flex-grow: 1;
+}
+
+#editor span.sign {
+  min-width: 36px;
+}
+
 body:not(.attacking):not(.gameover)
+  #game
   .tower.current
   + .tower
   .tower-floor:not(.destroying) {
@@ -325,17 +401,23 @@ body:not(.attacking):not(.gameover)
 }
 
 body:not(.attacking):not(.gameover)
+  #game
   .tower.current
   + .tower
   .tower-floor:not(.destroying):hover,
 body:not(.attacking):not(.gameover)
+  #game
   .tower.current
   + .tower
   .tower-floor:not(.destroying):focus-visible {
   box-shadow: 0 0 22px white inset, 0 0 22px white inset;
   outline: 1px solid white;
 }
-body:not(.gameover) .tower.current + .tower:not(.destroying) .floor-value {
+body:not(.gameover)
+  #game
+  .tower.current
+  + .tower:not(.destroying)
+  .floor-value {
   animation: jello 1s ease-in-out infinite;
   opacity: 1;
 }
@@ -382,20 +464,23 @@ dialog p span {
   display: block;
 }
 
-#endLevelDialog .button span {
+#endLevelDialog .button span,
+#endLevelDialog:not(.end) #gameEndMessage,
+#endLevelDialog.custom #gameEndMessage,
+.destroying .element,
+.destroying .d,
+section,
+[data-section="title"] #soundButton,
+[data-section="editor"] #soundButton,
+.tower-floor.destroying .character,
+.tower-floor.destroying .floor-value,
+#editor .tower-floor:not(.potion) .sign {
   display: none;
 }
 
 #endLevelDialog.end .menu,
 #endLevelDialog:not(.end) .next {
   display: inline-block;
-}
-
-#endLevelDialog:not(.end) #gameEndMessage {
-  display: none;
-}
-#endLevelDialog.custom #gameEndMessage {
-  display: none;
 }
 
 #endLevelDialog.end:not(.custom) .title {
@@ -423,6 +508,7 @@ dialog button {
 }
 
 .button {
+  display: inline-block;
   border: 3px solid;
   border-top-color: #67ffd5;
   border-bottom-color: #1f976a;
@@ -434,6 +520,8 @@ dialog button {
   background-color: #3ee2b4;
   color: #3f2631;
   position: relative;
+  text-align: center;
+  text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 3px;
   width: 200px;
@@ -474,16 +562,18 @@ dialog button {
   animation-delay: 100ms;
 }
 
-section {
-  display: none;
+.button[value="editor"] {
+  animation-delay: 200ms;
 }
+
 [data-section="title"],
 [data-section="menu"] {
   overflow: hidden;
 }
 [data-section="title"] #title,
 [data-section="game"] #game,
-[data-section="menu"] #menu {
+[data-section="menu"] #menu,
+[data-section="editor"] #editor {
   display: block;
 }
 
@@ -491,7 +581,7 @@ section {
   padding-top: 25px;
 }
 
-aside[data-tuto] {
+aside {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.5rem;
   font-weight: normal;
@@ -534,8 +624,21 @@ aside td {
   text-align: center;
 }
 
-[data-section="title"] #soundButton {
-  display: none;
+#editor aside * {
+  pointer-events: all;
+}
+
+#editor aside input {
+  height: 20px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+#editor aside a,
+#editor aside a:visited {
+  margin: auto;
+  display: block;
+  margin-top: 16px;
 }
 
 #soundButton {
@@ -559,63 +662,6 @@ aside td {
 #soundButton.on {
   background-position: 0 -64px;
   background-color: #25956a;
-}
-
-@media screen and (max-width: 750px) {
-  aside[data-tuto] {
-    font-size: 1rem;
-  }
-
-  dialog .title,
-  dialog p {
-    font-size: 3rem;
-  }
-
-  #gameEndMessage {
-    text-align: left;
-  }
-
-  #gameEndMessage span {
-    font-size: 2rem;
-  }
-}
-
-@media screen and (max-height: 500px) {
-  aside[data-tuto] {
-    font-size: 1rem;
-    left: 50px;
-    top: 50px;
-  }
-
-  #title {
-    padding-top: 8px;
-  }
-
-  dialog .title,
-  dialog p {
-    font-size: 3rem;
-  }
-
-  #gameEndMessage {
-    text-align: left;
-  }
-
-  #gameEndMessage span {
-    font-size: 2rem;
-  }
-
-  #titleDialog form {
-    gap: 16px;
-  }
-
-  .button {
-    font-size: 1rem;
-    padding: 4px;
-  }
-
-  .title {
-    margin: 0;
-  }
 }
 
 @keyframes spriteAnim {

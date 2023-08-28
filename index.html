@@ -21,6 +21,9 @@ Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
           <button class="button" value="no-sound">
             Play <small>without sound</small>
           </button>
+          <button class="button" value="editor">
+            <small>Level editor</small>
+          </button>
         </form>
       </dialog>
     </section>
@@ -184,6 +187,36 @@ Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
         </form>
       </dialog>
       <div id="c" class="tower-container"></div>
+    </section>
+
+    <section id="editor">
+      <aside style="display: block; position: fixed; z-index: 9">
+        <p><strong>Build your own level!</strong></p>
+        <label>
+          Share link to your level:
+          <input
+            readonly
+            value="133"
+            type="url"
+            id="cu"
+            onClick="this.select();"
+          />
+        </label>
+        <p>
+          <a id="ca" class="button" target="_blank"
+            ><small>Test your level</small></a
+          >
+        </p>
+      </aside>
+      <div id="ce" class="tower-container">
+        <div class="tower current">
+          <div class="tower-floor" data-element="none">
+            <div contenteditable class="floor-value value">10</div>
+            <div class="character"></div>
+            <div role="button" tabindex="1" class="element none">♦️</div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <script src="./index.js"></script>
