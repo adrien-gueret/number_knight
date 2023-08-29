@@ -235,9 +235,9 @@ function getMultipler(ennemyElement, potionSign) {
   }
 
   const typesAdvantages = {
-    fire: "plant",
-    plant: "water",
-    water: "fire",
+    f: "p",
+    p: "a",
+    a: "f",
   };
 
   if (typesAdvantages[playerElement] === ennemyElement) {
@@ -367,7 +367,7 @@ function attackTowerFloor(e) {
 
   const floor = e.target;
 
-  const isPotion = floor.classList.contains("potion");
+  const isPotion = floor.classList.contains("m");
   const value = Number(floor.dataset.value);
   const element = floor.dataset.element;
 
@@ -429,8 +429,7 @@ function attackTowerFloor(e) {
                 }[floor.dataset.sign]
               );
             } else {
-              playerValue +=
-                value * (floor.classList.contains("skeleton") ? -1 : 1);
+              playerValue += value * (floor.classList.contains("s") ? -1 : 1);
             }
 
             playerValueDom.innerHTML = playerValue;
@@ -439,7 +438,7 @@ function attackTowerFloor(e) {
             const isLastFloor = tower.childNodes.length === 1;
 
             if (!isLastFloor) {
-              if (floor.classList.contains("wizard")) {
+              if (floor.classList.contains("w")) {
                 for (let uFloor of tower.querySelectorAll(".tower-floor")) {
                   if (uFloor === floor) {
                     continue;
@@ -581,14 +580,14 @@ const floorsSeparator = "_";
 function decodeLevel(levelString) {
   const towers = levelString.split(towersSeparator);
 
-  const modifiersMap = {
-    p: { value: "plant", prop: "element" },
-    a: { value: "water", prop: "element" },
-    f: { value: "fire", prop: "element" },
-    b: { value: "blob", prop: "type" },
-    s: { value: "skeleton", prop: "type" },
-    w: { value: "wizard", prop: "type" },
-    m: { value: "potion", prop: "type" },
+  const modifiersToProp = {
+    p: "element",
+    a: "element",
+    f: "element",
+    b: "type",
+    s: "type",
+    w: "type",
+    m: "type",
   };
 
   return towers.map((towerString) => {
@@ -614,7 +613,7 @@ function decodeLevel(levelString) {
       const modifiers = floorString.substring(stringValue.length);
       modifiers.split("").forEach((modifier) => {
         if (modifier in modifiersMap) {
-          tower[modifiersMap[modifier].prop] = modifiersMap[modifier].value;
+          tower[modifiersToProp[modifier]] = modifier;
         }
       });
 
@@ -655,7 +654,7 @@ function generateLevel(towers) {
       );
 
       if (!isFirstTower) {
-        towerFloor.classList.add(floor.type ?? "blob");
+        towerFloor.classList.add(floor.type ?? "b");
       }
 
       const floorValueDom = document.createElement("div");
@@ -799,15 +798,7 @@ ce.onbeforeinput = (e) => {
 };
 
 const getCustomLevelCode = () => {
-  const modifiersMap = {
-    plant: "p",
-    water: "a",
-    fire: "f",
-    blob: "b",
-    skeleton: "s",
-    wizard: "w",
-    potion: "m",
-  };
+  const modifiers = ["p", "a", "f", "b", "s", "w", "m"];
 
   const towers = [];
 
@@ -823,7 +814,7 @@ const getCustomLevelCode = () => {
       }
       let floorCode = "";
 
-      if (floor.classList.contains("potion")) {
+      if (floor.classList.contains("m")) {
         floorCode += floor.dataset.sign;
       }
       console.log(floor);
@@ -833,11 +824,9 @@ const getCustomLevelCode = () => {
 
       floorCode += nodeValue.textContent;
 
-      modifiersMap[floor.dataset.element] &&
-        (floorCode += modifiersMap[floor.dataset.element]);
-
-      modifiersMap[floor.dataset.type] &&
-        (floorCode += modifiersMap[floor.dataset.type]);
+      [floor.dataset.element, floor.dataset.type].forEach((modifier) => {
+        modifiers.includes(modifier) && (floorCode += modifier);
+      });
 
       floors.push(floorCode);
     }
@@ -905,9 +894,9 @@ const createTower = () => {
 const createFloor = (tower) => {
   const floor = document.createElement("div");
   floor.dataset.element = "none";
-  floor.dataset.type = "blob";
+  floor.dataset.type = "b";
   floor.dataset.sign = "+";
-  floor.className = "tower-floor blob";
+  floor.className = "tower-floor b";
   floor.innerHTML = `<button class="d">❌</button><div class="floor-value"><span class="sign" contenteditable>+</span><span class="value" contenteditable>10</span></div><div role="button" tabindex="1" class="character"></div><div role="button" tabindex="1" class="element none">♦️</div>`;
   tower.firstChild.after(floor);
 };
@@ -939,17 +928,11 @@ ce.onclick = (e) => {
     }
   };
 
-  next(
-    "element",
-    ["none", "fire", "water", "plant"],
-    "element",
-    e.target,
-    "element"
-  );
+  next("element", ["none", "f", "a", "p"], "element", e.target, "element");
 
   next(
     "character",
-    ["blob", "skeleton", "wizard", "potion"],
+    ["b", "s", "w", "m"],
     "type",
     e.target.parentNode,
     "tower-floor"
