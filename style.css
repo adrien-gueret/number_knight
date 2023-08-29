@@ -27,6 +27,18 @@ body {
   user-select: none;
 }
 
+body[data-section="title"]::after,
+body[data-section="menu"]::after,
+.tower-floor .character,
+.element,
+.hit,
+#soundButton,
+body:not(.walking)
+  section:not(#editor)
+  .tower-floor:not(.destroying)[data-element]::after {
+  background: url(sprites.png);
+}
+
 #levelList {
   max-width: 1000px;
 }
@@ -38,6 +50,7 @@ body {
   position: relative;
   bottom: 32px;
 }
+
 .tower {
   display: flex;
   flex-direction: column;
@@ -144,7 +157,6 @@ body[data-section="menu"]::after,
   display: block;
   width: 16px;
   height: 16px;
-  background: url(sprites.png);
   transform: scale(4);
   transform-origin: center bottom;
   background-position: var(--from);
@@ -176,7 +188,6 @@ body:not(.walking)
   position: absolute;
   right: 16px;
   bottom: 8px;
-  background-image: url(sprites.png);
   transform: scale(2);
   z-index: 1;
   color: transparent;
@@ -276,7 +287,6 @@ section:not(#editor) .element {
   align-items: center;
   width: 16px;
   height: 16px;
-  background: url(sprites.png);
   z-index: 3;
   background-position: 0 -128px;
   position: absolute;
@@ -650,7 +660,6 @@ aside td {
   height: 16px;
   z-index: 999;
   border: 0;
-  background-image: url(sprites.png);
   transform: translateX(calc(var(--scrollX) * -1)) scale(4);
   transition: transform 333ms ease-in;
   transform-origin: top right;

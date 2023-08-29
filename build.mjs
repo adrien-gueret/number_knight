@@ -24,6 +24,12 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
   const minifiedCSS = await minify.css(styleCSS);
 
   console.log("Minify HTML...");
+
+  const toBase64Url = (fileName) =>
+    `data:image/png;base64,${fs.readFileSync(fileName, {
+      encoding: "base64",
+    })}`;
+
   indexHTML = indexHTML
     .replace(
       '<script src="./index.js"></script>',
@@ -33,25 +39,17 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
       '<link href="./style.css" rel="stylesheet" />',
       `<style>${minifiedCSS}</style>`
     )
-    .replace("./favicon.png", "./f.png")
-    .replaceAll("ground.png", "g.png")
+    .replace("./favicon.png", toBase64Url("./favicon.png"))
+    .replaceAll("ground.png", toBase64Url("./ground.png"))
     .replaceAll("front.svg", "f.svg")
     .replaceAll("back.svg", "b.svg")
-    .replaceAll("sprites.png", "s.png")
-    .replaceAll("tower.png", "t.png")
+    .replaceAll("sprites.png", toBase64Url("./sprites.png"))
+    .replaceAll("tower.png", toBase64Url("./tower.png"))
 
     .replaceAll("tower-container", "t-c")
     .replaceAll("destroying-floor", "d-f")
     .replaceAll("tower-floor", "t-f")
     .replaceAll("floor-value", "f-v")
-
-    .replaceAll("data-tuto", "data-t")
-    .replaceAll("dataset.tuto", "dataset.t")
-    .replaceAll("data-section", "data-s")
-    .replaceAll("dataset.section", "dataset.s")
-    .replaceAll("dataset.value", "dataset.v")
-    .replaceAll("data-element", "data-e")
-    .replaceAll("dataset.element", "dataset.e")
 
     .replaceAll("--scrollX", "--sx")
     .replaceAll("--initialX", "--ix")
@@ -89,12 +87,8 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
   console.log("Write entry files...");
 
   fs.mkdirSync("./entry");
-  fs.cpSync("./favicon.png", "./entry/f.png");
-  fs.cpSync("./ground.png", "./entry/g.png");
   fs.cpSync("./front.svg", "./entry/f.svg");
   fs.cpSync("./back.svg", "./entry/b.svg");
-  fs.cpSync("./sprites.png", "./entry/s.png");
-  fs.cpSync("./tower.png", "./entry/t.png");
 
   fs.writeFileSync(
     "./entry/index.html",
