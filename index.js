@@ -817,7 +817,7 @@ const getCustomLevelCode = () => {
       if (floor.classList.contains("m")) {
         floorCode += floor.dataset.sign;
       }
-      console.log(floor);
+
       const nodeValue =
         floor.querySelector(".floor-value .value") ||
         floor.querySelector(".floor-value");
