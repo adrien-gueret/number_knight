@@ -921,26 +921,39 @@ ce.onclick = (e) => {
     return;
   }
 
-  if (e.target.classList.contains("element")) {
-    const elements = ["none", "fire", "water", "plant"];
-    const nextElement =
-      elements[elements.indexOf(e.target.parentNode.dataset.element) + 1] ||
-      "none";
-    e.target.parentNode.dataset.element = nextElement;
-    e.target.className = "element " + nextElement;
-    updateEditorUICode();
-    return;
-  }
+  const next = (
+    classNameToHave,
+    items,
+    datasetProp,
+    domToUpdateClassname,
+    baseClassname
+  ) => {
+    if (e.target.classList.contains(classNameToHave)) {
+      const nextItem =
+        items[items.indexOf(e.target.parentNode.dataset[datasetProp]) + 1] ||
+        items[0];
+      e.target.parentNode.dataset[datasetProp] = nextItem;
+      domToUpdateClassname.className = baseClassname + " " + nextItem;
 
-  if (e.target.classList.contains("character")) {
-    const types = ["blob", "skeleton", "wizard", "potion"];
-    const nextType =
-      types[types.indexOf(e.target.parentNode.dataset.type) + 1] || "blob";
-    e.target.parentNode.dataset.type = nextType;
-    e.target.parentNode.className = "tower-floor " + nextType;
-    updateEditorUICode();
-    return;
-  }
+      updateEditorUICode();
+    }
+  };
+
+  next(
+    "element",
+    ["none", "fire", "water", "plant"],
+    "element",
+    e.target,
+    "element"
+  );
+
+  next(
+    "character",
+    ["blob", "skeleton", "wizard", "potion"],
+    "type",
+    e.target.parentNode,
+    "tower-floor"
+  );
 
   if (!e.target.classList.contains("ghost")) {
     return;
