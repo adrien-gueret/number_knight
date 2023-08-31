@@ -788,7 +788,7 @@ ce.onbeforeinput = (e) => {
   if (
     isInputAllowed ||
     (e.inputType === "insertText" &&
-      ((e.target.className === "value" &&
+      ((e.target.classList.contains("value") &&
         Number.isInteger(parseInt(e.data, 10))) ||
         (e.target.className === "sign" && isSign(e.data))))
   ) {
