@@ -54,6 +54,8 @@ const levels = [
   "100ft+5mpt-10mpt/2mft+10matx2mftx2mat/2mft119",
   "10t10f_5a_+10mpt-6mf_10wp_10sat+10m_70_20w",
   "4t+6mf_+6ma_+6mp_10wft100w_+80pm_+80amt-500m",
+  "10t-2mp_-2m_-2mf_-2mat5p",
+  "10t-20mp_4sa_-10mf_6wp_6wft-20ma",
   "999t1",
 ];
 
