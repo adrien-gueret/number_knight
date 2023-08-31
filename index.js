@@ -2,9 +2,9 @@ const styleSheet = s.sheet;
 
 let selectors = [];
 
-for (let tuto of document.querySelectorAll("[data-tuto]")) {
+for (let tuto of document.querySelectorAll("[data-t]")) {
   selectors.push(
-    `body[data-tuto="${tuto.dataset.tuto}"] aside[data-tuto="${tuto.dataset.tuto}"]`
+    `body[data-t="${tuto.dataset.t}"] aside[data-t="${tuto.dataset.t}"]`
   );
 }
 
@@ -228,7 +228,7 @@ let currentLevelIndex,
 function getMultipler(ennemyElement, potionSign) {
   const isNegativePotion = ["-", "/"].includes(potionSign);
 
-  const playerElement = playerDom.parentNode.dataset.element;
+  const playerElement = playerDom.parentNode.dataset.e;
 
   if (!ennemyElement || !playerElement) {
     return 1;
@@ -369,7 +369,7 @@ function attackTowerFloor(e) {
 
   const isPotion = floor.classList.contains("m");
   const value = Number(floor.dataset.value);
-  const element = floor.dataset.element;
+  const element = floor.dataset.e;
 
   const ennemy = floor.querySelector(".character");
 
@@ -467,9 +467,9 @@ function attackTowerFloor(e) {
               explodeTowerFloor(e.target);
 
               if (element) {
-                playerDom.parentNode.dataset.element = element;
+                playerDom.parentNode.dataset.e = element;
               } else {
-                delete playerDom.parentNode.dataset.element;
+                delete playerDom.parentNode.dataset.e;
               }
 
               // Make player going back to its tower
@@ -495,7 +495,7 @@ function attackTowerFloor(e) {
                 .querySelector(".tower.current")
                 .classList.remove("current");
 
-              delete playerDom.parentNode.dataset.element;
+              delete playerDom.parentNode.dataset.e;
 
               tower.classList.add("current");
               floor.tabIndex = -1;
@@ -581,9 +581,9 @@ function decodeLevel(levelString) {
   const towers = levelString.split(towersSeparator);
 
   const modifiersToProp = {
-    p: "element",
-    a: "element",
-    f: "element",
+    p: "e",
+    a: "e",
+    f: "e",
     b: "type",
     s: "type",
     w: "type",
@@ -612,7 +612,7 @@ function decodeLevel(levelString) {
 
       const modifiers = floorString.substring(stringValue.length);
       modifiers.split("").forEach((modifier) => {
-        if (modifier in modifiersMap) {
+        if (modifier in modifiersToProp) {
           tower[modifiersToProp[modifier]] = modifier;
         }
       });
@@ -649,7 +649,7 @@ function generateLevel(towers) {
 
       floorValue = floor.value;
 
-      ["element", "sign", "value"].forEach(
+      ["e", "sign", "value"].forEach(
         (prop) => floor[prop] && (towerFloor.dataset[prop] = floor[prop])
       );
 
@@ -700,7 +700,7 @@ function goToLevel(levelIndex) {
     return;
   }
 
-  document.body.dataset.tuto = levelIndex;
+  document.body.dataset.t = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
 }
@@ -722,7 +722,7 @@ function startGame(levelIndex) {
     document.body.offsetHeight;
     document.body.style.display = "block";
 
-    document.body.dataset.section = "game";
+    document.body.dataset.s = "game";
 
     goToLevel(levelIndex);
   };
@@ -740,7 +740,7 @@ titleDialog.addEventListener("close", (e) => {
     createFloor(createTower());
     createTower();
     updateEditorUICode();
-    document.body.dataset.section = "editor";
+    document.body.dataset.s = "editor";
     return;
   }
 
@@ -771,7 +771,7 @@ titleDialog.addEventListener("close", (e) => {
 
     levelList.append(menuFragment);
 
-    document.body.dataset.section = "menu";
+    document.body.dataset.s = "menu";
   }
 });
 
@@ -824,7 +824,7 @@ const getCustomLevelCode = () => {
 
       floorCode += nodeValue.textContent;
 
-      [floor.dataset.element, floor.dataset.type].forEach((modifier) => {
+      [floor.dataset.type, floor.dataset.e].forEach((modifier) => {
         modifiers.includes(modifier) && (floorCode += modifier);
       });
 
@@ -893,7 +893,7 @@ const createTower = () => {
 
 const createFloor = (tower) => {
   const floor = document.createElement("div");
-  floor.dataset.element = "none";
+  floor.dataset.e = "none";
   floor.dataset.type = "b";
   floor.dataset.sign = "+";
   floor.className = "tower-floor b";
@@ -928,7 +928,7 @@ ce.onclick = (e) => {
     }
   };
 
-  next("element", ["none", "f", "a", "p"], "element", e.target, "element");
+  next("element", ["none", "f", "a", "p"], "e", e.target, "element");
 
   next(
     "character",

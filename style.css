@@ -27,15 +27,15 @@ body {
   user-select: none;
 }
 
-body[data-section="title"]::after,
-body[data-section="menu"]::after,
+body[data-s="title"]::after,
+body[data-s="menu"]::after,
 .tower-floor .character,
 .element,
 .hit,
 #soundButton,
 body:not(.walking)
   section:not(#editor)
-  .tower-floor:not(.destroying)[data-element]::after {
+  .tower-floor:not(.destroying)[data-e]::after {
   background-image: url(sprites.png);
 }
 
@@ -140,8 +140,8 @@ body:not(.walking)
   z-index: 30;
 }
 
-body[data-section="title"]::after,
-body[data-section="menu"]::after,
+body[data-s="title"]::after,
+body[data-s="menu"]::after,
 .tower.current .tower-floor .character {
   --from: 0 0;
   --to: -32px 0;
@@ -151,8 +151,8 @@ body[data-section="menu"]::after,
   left: 0;
 }
 
-body[data-section="title"]::after,
-body[data-section="menu"]::after,
+body[data-s="title"]::after,
+body[data-s="menu"]::after,
 .tower-floor .character {
   display: block;
   width: 16px;
@@ -168,8 +168,8 @@ body[data-section="menu"]::after,
   z-index: 0;
 }
 
-body[data-section="title"]::after,
-body[data-section="menu"]::after {
+body[data-s="title"]::after,
+body[data-s="menu"]::after {
   content: "";
   position: absolute !important;
   bottom: 32px;
@@ -180,7 +180,7 @@ body[data-section="menu"]::after {
 .element,
 body:not(.walking)
   section:not(#editor)
-  .tower-floor:not(.destroying)[data-element]::after {
+  .tower-floor:not(.destroying)[data-e]::after {
   content: "";
   display: block;
   width: 15px;
@@ -203,30 +203,30 @@ section:not(#editor) .element {
   transform: none;
 }
 
-.tower-floor[data-element="f"] {
+.tower-floor[data-e="f"] {
   color: #e84537;
 }
-.tower-floor[data-element="a"] {
+.tower-floor[data-e="a"] {
   color: #0099db;
 }
-.tower-floor[data-element="p"] {
+.tower-floor[data-e="p"] {
   color: #25956a;
 }
 
 .element.f,
-.tower-floor:not(.destroying)[data-element="f"]::after {
+.tower-floor:not(.destroying)[data-e="f"]::after {
   background-position: -16px -48px !important;
   background-color: #e84537;
 }
 
 .element.p,
-.tower-floor:not(.destroying)[data-element="p"]::after {
+.tower-floor:not(.destroying)[data-e="p"]::after {
   background-position: -31px -48px !important;
   background-color: #25956a;
 }
 
 .element.a,
-.tower-floor:not(.destroying)[data-element="a"]::after {
+.tower-floor:not(.destroying)[data-e="a"]::after {
   background-position: -46px -48px !important;
   background-color: #0099db;
 }
@@ -252,31 +252,31 @@ section:not(#editor) .element {
   box-shadow: inset 0 0 2px white;
 }
 
-.tower.current [data-element] .character .hit {
+.tower.current [data-e] .character .hit {
   filter: saturate(3) brightness(0.7);
 }
 
-.tower.current [data-element="f"] .character {
+.tower.current [data-e="f"] .character {
   filter: hue-rotate(115deg) saturate(2);
 }
 
-.tower.current [data-element="a"] .character {
+.tower.current [data-e="a"] .character {
   filter: hue-rotate(350deg) saturate(2);
 }
 
-.tower.current [data-element="p"] .character {
+.tower.current [data-e="p"] .character {
   filter: hue-rotate(220deg) saturate(2);
 }
 
-[data-element="f"] .character {
+[data-e="f"] .character {
   filter: hue-rotate(125deg) saturate(3);
 }
 
-[data-element="a"] .character {
+[data-e="a"] .character {
   filter: hue-rotate(350deg) saturate(3);
 }
 
-[data-element="p"] .character {
+[data-e="p"] .character {
   filter: hue-rotate(255deg) saturate(3);
 }
 
@@ -324,8 +324,8 @@ section:not(#editor) .element {
     -1px 0 var(--shadow), 0 -1px var(--shadow), 0 1px var(--shadow);
 }
 
-body.walking[data-section="title"]::after,
-body.walking[data-section="menu"]::after,
+body.walking[data-s="title"]::after,
+body.walking[data-s="menu"]::after,
 body.walking .tower.current .tower-floor .character,
 body.attacking .tower.current .tower-floor .character {
   --from: -32px 0;
@@ -338,8 +338,8 @@ body.walking .tower.current .tower-floor .character {
   transition: left 2s ease-in;
 }
 
-body.walking[data-section="title"]::after,
-body.walking[data-section="menu"]::after {
+body.walking[data-s="title"]::after,
+body.walking[data-s="menu"]::after {
   left: 100vw;
   transition: left 1s ease-in;
 }
@@ -480,8 +480,8 @@ dialog p span {
 .destroying .element,
 .destroying .d,
 section,
-[data-section="title"] #soundButton,
-[data-section="editor"] #soundButton,
+[data-s="title"] #soundButton,
+[data-s="editor"] #soundButton,
 .tower-floor.destroying .character,
 .tower-floor.destroying .floor-value,
 #editor .tower-floor:not(.m) .sign {
@@ -576,14 +576,14 @@ dialog button {
   animation-delay: 200ms;
 }
 
-[data-section="title"],
-[data-section="menu"] {
+[data-s="title"],
+[data-s="menu"] {
   overflow: hidden;
 }
-[data-section="title"] #title,
-[data-section="game"] #game,
-[data-section="menu"] #menu,
-[data-section="editor"] #editor {
+[data-s="title"] #title,
+[data-s="game"] #game,
+[data-s="menu"] #menu,
+[data-s="editor"] #editor {
   display: block;
 }
 
@@ -609,7 +609,7 @@ aside {
   transition: transform 333ms ease-in;
 }
 
-aside[data-tuto="21"] {
+aside[data-t="21"] {
   max-width: 600px;
 }
 
