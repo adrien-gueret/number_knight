@@ -587,7 +587,6 @@ dialog button {
   animation-delay: 200ms;
 }
 
-[data-s="title"],
 [data-s="title"] #title,
 [data-s="game"] #game,
 [data-s="menu"] #menu,
@@ -770,27 +769,27 @@ aside td {
   }
 
   33.3% {
-    transform: skew(6.25deg);
+    transform: skew(6.2deg);
   }
 
   44.4% {
-    transform: skew(-3.125deg);
+    transform: skew(-3.1deg);
   }
 
   55.5% {
-    transform: skew(1.5625deg);
+    transform: skew(1.5deg);
   }
 
   66.6% {
-    transform: skew(-0.78125deg);
+    transform: skew(-0.7deg);
   }
 
   77.7% {
-    transform: skewX(0.390625deg);
+    transform: skewX(0.3deg);
   }
 
   88.8% {
-    transform: skew(-0.1953125deg);
+    transform: skew(-0.1deg);
   }
 }
 
