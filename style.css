@@ -43,6 +43,13 @@ body:not(.walking)
 
 #levelList {
   max-width: 1000px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#levelList::-webkit-scrollbar {
+  display: none;
 }
 
 .tower-container {
@@ -194,6 +201,16 @@ body:not(.walking)
   transform: scale(2);
   z-index: 1;
   color: transparent;
+}
+
+aside .element {
+  position: relative;
+  transform: none;
+  right: auto;
+  bottom: auto;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 2px;
 }
 
 section:not(#editor) .element {
@@ -574,9 +591,6 @@ dialog button {
 }
 
 [data-s="title"],
-[data-s="menu"] {
-  overflow: hidden;
-}
 [data-s="title"] #title,
 [data-s="game"] #game,
 [data-s="menu"] #menu,
@@ -668,6 +682,56 @@ aside td {
 #soundButton.on {
   background-position: 0 -64px;
   background-color: #25956a;
+}
+
+@media screen and ((max-height: 500px) or (max-width: 750px)) {
+  aside {
+    font-size: 1rem;
+    padding: 12px;
+    position: relative;
+    max-width: none;
+    left: 0;
+    top: 0;
+    border-radius: 0;
+  }
+
+  #title {
+    padding-top: 8px;
+  }
+
+  dialog .title,
+  dialog p {
+    font-size: 3rem;
+  }
+
+  #gameEndMessage {
+    text-align: left;
+  }
+
+  #gameEndMessage span {
+    font-size: 2rem;
+  }
+
+  #titleDialog form {
+    gap: 16px;
+  }
+
+  .button {
+    font-size: 1rem;
+    padding: 4px;
+  }
+
+  .title {
+    margin: 0;
+  }
+
+  #soundButton {
+    position: relative;
+    left: 4px;
+    right: 0;
+    top: 0;
+    transform: none;
+  }
 }
 
 @keyframes spriteAnim {

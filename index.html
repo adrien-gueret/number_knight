@@ -38,139 +38,118 @@ Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
         </form>
       </dialog>
     </section>
+    <aside data-t="0">
+      <p>Welcome to <strong>Number Knight</strong>!</p>
+      <p>Your goal is to conquer towers by fighting monsters.</p>
+      <p>Click on this little blob to kill it!</p>
+    </aside>
+
+    <aside data-t="1">
+      <p>Well done! When you kill a monster, you gain its power.</p>
+      <p>
+        In order to win a fight, you must have <strong>more</strong> power than
+        your target: if you have the same power, you'll lose!
+      </p>
+    </aside>
+
+    <aside data-t="3">
+      <p>Oh, some elementary blobs!</p>
+      <p>
+        The last one is powerfull with its 100 of power... But don't worry: when
+        you kill a monster, you absorb its element and your
+        <strong>next</strong> attack will use it.
+      </p>
+      <p>
+        <span class="element p">Plant</span> monsters are weak against
+        <span class="element f">fire</span> attacks: your power will count
+        <strong>twice</strong> against this green blob!
+      </p>
+    </aside>
+
+    <aside data-t="4">
+      <p>
+        Don't forget: the element is available only for your
+        <strong>next</strong> attack.
+      </p>
+    </aside>
+
+    <aside data-t="5">
+      <p>
+        If you fight en elementary monster with a weaker element, your power
+        will be <strong>divided</strong> by two for this duel.
+      </p>
+      <p>
+        <strong
+          >You start this level with
+          <span class="element f">fire</span> element</strong
+        >, which is weak against <span class="element a">water</span>...
+      </p>
+    </aside>
+
+    <aside data-t="6">
+      <p>
+        There're three elements: <span class="element f">fire</span>,
+        <span class="element a">water</span> and
+        <span class="element p">plant</span>.
+        <br />
+        Each element is strong against another one:
+      </p>
+      <p>
+        <span class="element f">fire</span> >
+        <span class="element p">plant</span> >
+        <span class="element a">water</span> >
+        <span class="element f">fire</span>
+      </p>
+    </aside>
+
+    <aside data-t="9">
+      <p>
+        Hm, beware of these skeletons...
+        <br />When you kill them, you don't gain their power... You
+        <strong>lose</strong> it!
+      </p>
+      <p>If your own power reaches 0 or below, <strong>you die</strong>!</p>
+    </aside>
+
+    <aside data-t="11">
+      <p>Like blobs, skeletons can be attached to some element.</p>
+    </aside>
+
+    <aside data-t="13">
+      <p>
+        These wizards have strange magic...
+        <br />When you kill them, you gain their power...
+        <strong>but the other monsters in the same tower gain it too!</strong>
+      </p>
+    </aside>
+
+    <aside data-t="16">
+      <p>What about elementary wizards?</p>
+    </aside>
+
+    <aside data-t="19">
+      <p>
+        Oh! Potions!<br />
+        You can't lose against potions: you simply drink them and your power is
+        modified according to their value.
+      </p>
+    </aside>
+
+    <aside data-t="20">
+      <p>Well... You still can die if your power reaches 0 or below...</p>
+    </aside>
+
+    <aside data-t="22">
+      <p>
+        Potions can also contain some elements!<br />
+        When drinking a positive potion, <strong>its effect</strong> will be
+        doubled if your element is stronger, or divided by two if it's
+        weaker.<br />
+        When drinking a negative potion, <strong>its effect</strong> will be
+        doubled if your element is weaker, or divided by two if it's stronger.
+      </p>
+    </aside>
     <section id="game">
-      <aside data-t="0">
-        <p>Welcome to <strong>Number Knight</strong>!</p>
-        <p>Your goal is to conquer towers by fighting monsters.</p>
-        <p>Click on this little blob to kill it!</p>
-      </aside>
-
-      <aside data-t="1">
-        <p>Well done! When you kill a monster, you gain its power.</p>
-        <p>
-          In order to win a fight, you must have <strong>more</strong> power
-          than your target: if you have the same power, you'll lose!
-        </p>
-      </aside>
-
-      <aside data-t="3">
-        <p>Oh, some elementary blobs!</p>
-        <p>
-          The last one is powerfull with its 100 of power... But don't worry:
-          when you kill a monster, you absorb its element and your
-          <strong>next</strong> attack will use it.
-        </p>
-        <p>
-          <span class="element p">Plant</span> monsters are weak against
-          <span class="element f">fire</span> attacks: your power will count
-          <strong>twice</strong> against this green blob!
-        </p>
-      </aside>
-
-      <aside data-t="4">
-        <p>
-          Don't forget: the element is available only for your
-          <strong>next</strong> attack.
-        </p>
-      </aside>
-
-      <aside data-t="5">
-        <p>
-          If you fight en elementary monster with a weaker element, your power
-          will be divided by two for this duel.
-        </p>
-        <p>
-          <strong
-            >You start this level with
-            <span class="element f">fire</span> element</strong
-          >, which is weak against <span class="element a">water</span>...
-        </p>
-      </aside>
-
-      <aside data-t="6">
-        <p>
-          There're three elements: <span class="element f">fire</span>,
-          <span class="element a">water</span> and
-          <span class="element p">plant</span>.
-        </p>
-        <p>Each has a weakness and resistance:</p>
-
-        <table>
-          <tr>
-            <th></th>
-            <th><span class="element f">fire</span> target</th>
-            <th><span class="element a">water</span> target</th>
-            <th><span class="element p">plant</span> target</th>
-          </tr>
-          <tr>
-            <th><span class="element f">fire</span> attack</th>
-            <td>x1</td>
-            <td>/2</td>
-            <td>x2</td>
-          </tr>
-          <tr>
-            <th><span class="element a">water</span> attack</th>
-            <td>x2</td>
-            <td>x1</td>
-            <td>/2</td>
-          </tr>
-          <tr>
-            <th><span class="element p">plant</span> attack</th>
-            <td>/2</td>
-            <td>x2</td>
-            <td>x1</td>
-          </tr>
-        </table>
-      </aside>
-
-      <aside data-t="9">
-        <p>
-          Hm, beware of these skeletons...
-          <br />When you kill them, you don't gain their power... You
-          <strong>lose</strong> it!
-        </p>
-        <p>If your own power reaches 0 or below, <strong>you die</strong>!</p>
-      </aside>
-
-      <aside data-t="11">
-        <p>Like blobs, skeletons can be attached to some element.</p>
-      </aside>
-
-      <aside data-t="13">
-        <p>
-          These wizards have strange magic...
-          <br />When you kill them, you gain their power...
-          <strong>but the other monsters in the same tower gain it too!</strong>
-        </p>
-      </aside>
-
-      <aside data-t="16">
-        <p>What about elementary wizards?</p>
-      </aside>
-
-      <aside data-t="19">
-        <p>
-          Oh! Potions!<br />
-          You can't lose against potions: you simply drink them and your power
-          is modified according to their value.
-        </p>
-      </aside>
-
-      <aside data-t="20">
-        <p>Well... You still can die if your power reaches 0 or below...</p>
-      </aside>
-
-      <aside data-t="22">
-        <p>
-          Potions can also contain some elements!<br />
-          When drinking a positive potion, <strong>its effect</strong> will be
-          doubled if your element is stronger, or divided by two if it's
-          weaker.<br />
-          When drinking a negative potion, <strong>its effect</strong> will be
-          doubled if your element is weaker, or divided by two if it's stronger.
-        </p>
-      </aside>
-
       <dialog id="gameOverDialog">
         <form method="dialog">
           <p class="title split">Too bad!</p>
