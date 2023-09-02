@@ -774,6 +774,7 @@ titleDialog.addEventListener("close", (e) => {
     levelList.append(menuFragment);
 
     document.body.dataset.s = "menu";
+    menuDialog.showModal();
   }
 });
 
@@ -956,6 +957,8 @@ ce.onclick = (e) => {
 if (window.location.hash) {
   isCustomLevel = true;
   startGame(window.location.hash.substring(1));
+} else {
+  titleDialog.showModal();
 }
 
 window.onhashchange = () => window.location.reload();

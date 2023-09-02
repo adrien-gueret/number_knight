@@ -43,9 +43,6 @@ body:not(.walking)
 
 #levelList {
   max-width: 1000px;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 #levelList::-webkit-scrollbar {
@@ -449,7 +446,7 @@ dialog {
   z-index: 100;
 }
 
-dialog::backdrop {
+#game dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -728,6 +725,12 @@ aside td {
     top: 0;
     transform: none;
   }
+
+  #levelList {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }
 
 @keyframes spriteAnim {
@@ -759,36 +762,36 @@ aside td {
 
 @keyframes jello {
   from,
-  11.1%,
+  11%,
   to {
     transform: translate3d(0, 0, 0);
   }
 
-  22.2% {
+  22% {
     transform: skew(-2.5deg);
   }
 
-  33.3% {
+  33% {
     transform: skew(6.2deg);
   }
 
-  44.4% {
+  44% {
     transform: skew(-3.1deg);
   }
 
-  55.5% {
+  55% {
     transform: skew(1.5deg);
   }
 
-  66.6% {
+  66% {
     transform: skew(-0.7deg);
   }
 
-  77.7% {
+  77% {
     transform: skewX(0.3deg);
   }
 
-  88.8% {
+  88% {
     transform: skew(-0.1deg);
   }
 }
