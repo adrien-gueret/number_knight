@@ -200,7 +200,6 @@ body:not(.walking)
   bottom: 8px;
   transform: scale(2);
   z-index: 1;
-  color: transparent;
 }
 
 aside .element {
@@ -217,8 +216,6 @@ section:not(#editor) .element {
   position: relative;
   vertical-align: middle;
   display: inline-block;
-  color: transparent;
-  overflow: hidden;
   inset: 0;
   transform: none;
 }
