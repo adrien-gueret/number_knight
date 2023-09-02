@@ -263,18 +263,6 @@ section:not(#editor) .element {
   filter: saturate(3) brightness(0.7);
 }
 
-.tower.current [data-e="f"] .character {
-  filter: hue-rotate(115deg) saturate(2);
-}
-
-.tower.current [data-e="a"] .character {
-  filter: hue-rotate(350deg) saturate(2);
-}
-
-.tower.current [data-e="p"] .character {
-  filter: hue-rotate(220deg) saturate(2);
-}
-
 [data-e="f"] .character {
   filter: hue-rotate(125deg) saturate(3);
 }
