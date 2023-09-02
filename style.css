@@ -3,7 +3,9 @@ body {
   margin: 0;
   padding: 0;
   min-width: 100vw;
+  min-width: 100dvw;
   min-height: 100vh;
+  min-height: 100dvh;
   background-image: url(ground.png), url(front.svg), url(back.svg),
     radial-gradient(
       circle at top center,
@@ -45,6 +47,7 @@ body:not(.walking)
 
 .tower-container {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   padding-left: calc(50vw - 192px);
   position: relative;
@@ -237,8 +240,12 @@ section:not(#editor) .element {
   color: #3f2631;
   border: 1px solid #3f2631;
   text-align: center;
-  line-height: 14px;
+  font-size: 12px;
+  padding-top: 2px;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #editor .element,
@@ -463,6 +470,7 @@ dialog .title,
 #endLevelDialog .title,
 dialog p span {
   --init-y: -100vh;
+  --init-y: -100dvh;
   transform: translateY(var(--init-y));
   animation: gameOverLetter 800ms cubic-bezier(0.29, 0.76, 0.56, 1.33) 1;
   animation-fill-mode: forwards;
@@ -511,6 +519,7 @@ section,
 
 dialog button {
   --init-y: 100vh;
+  --init-y: 100dvh;
   transform: translateY(var(--init-y));
   animation: gameOverLetter 800ms ease-in 1;
   animation-fill-mode: forwards;
