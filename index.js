@@ -29,36 +29,35 @@ for (let text of document.querySelectorAll(".split")) {
 }
 
 const levels = [
-  "10t5",
-  "5t3_5",
-  "8t5_12t25_65_20",
-  "30t25ft100p",
-  "10t10_50p_1f_5",
-  "8ft4_7a_2f",
-  "5t15p_3f_5a",
-  "10at5p_40a_15_10ft70p",
-  "5pt3p_3a_3_3ft15a_15f_15p_15t1_80a_300f",
-  "100t40st30st20s",
-  "50t10_40st10s_10",
-  "20at10sa_10sf_10ft5sf",
-  "20at10sp_10sf_10ft25f_15a_30ps_10ast10a_10sf",
-  "20t10w_10w_10wt10w_10w",
-  "10t5w_10_5t35",
-  "10t4_5s_3wt14",
-  "5ft10a_5wp_5aw_5sp",
-  "10at3wf_3sf_3wp_3sp",
-  "8ft4a_2sf_3wpt4p_8wa_10sft9a_18wf_9_9pt230f",
-  "1t+20mt-10mt11_x2m",
-  "10t-10m_+1mt-20m_+30m_-100m_+200m",
-  "5t+10m_10a_5spt20wa_5sp_+20mt70",
-  "100ft+5mpt-10mpt/2mft+10matx2mftx2mat/2mft119",
-  "10t10f_5a_+10mpt-6mf_10wp_10sat+10m_70_20w",
-  "4t+6mf_+6ma_+6mp_10wft100w_+80pm_+80amt-500m",
-  "10t-2mp_-2m_-2mf_-2mat5p",
-  "10t-20mp_4sa_-10mf_6wp_6wft-20ma",
+  "1t0",
+  "2t1_2",
+  "3t2_4t16_32_8",
+  "4t6f_3f_12ft45p",
+  "5t5_25p_2f_1",
+  "6ft2_5a_1f",
+  "7t20p_5f_7a",
+  "8at4p_38a_13_8ft70p",
+  "9pt7p_7a_7_7ft35a_35f_35p_35t1_300a_950f",
+  "10t4st3st2s",
+  "11t1_10st1s_1",
+  "12at6sa_6sf_6ft5sf",
+  "13at3sp_3sf_3ft25f_15a_30ps_10ast10a_10sf",
+  "14t2w_2wt10w_10wt40",
+  "15t10w_15_10t65",
+  "16t10_11s_10wt24",
+  "17ft22a_17wp_17aw_17sp",
+  "18at7wf_7sf_7wp_7sp",
+  "19ft12a_10sf_11wpt24p_28wa_30sft50a_65wf_50_50pt940f",
+  "20t+100mt-50mt130_x2m",
+  "21t-25m_+5mt-20m_+30m_-10m",
+  "22t+28m_40a_40spt20wa_5sp_+20mt100",
+  "23ft+30mpt+17mpt/2mft+10matx2mftx2mat/2mft119",
+  "24t10f_6a_+10mpt-6mf_10wp_10sat+10m_90_20w",
+  "25t+40mf_+40ma_+40mp_30wft100w_+80pm_+80amt-1000m",
+  "26t-8mp_-8m_-8mf_-8mat3p",
+  "27t-20mp_15sa_-10mf_6wp_6sp_6wft-30ma",
   "999t1",
 ];
-
 const t = (i, n) => (n - i) / n;
 
 const removeSound = (i) => {
@@ -259,11 +258,11 @@ function isAttackSuccess(ennemyValue, ennemyElement) {
   return value > ennemyValue;
 }
 
-gameOverDialog.addEventListener("close", () => {
+gameOverDialog.onclose = () => {
   goToLevel(currentLevelIndex);
-});
+};
 
-endLevelDialog.addEventListener("close", () => {
+endLevelDialog.onclose = () => {
   const nextIndex = currentLevelIndex + 1;
   if (levels[nextIndex]) {
     goToLevel(nextIndex);
@@ -271,7 +270,11 @@ endLevelDialog.addEventListener("close", () => {
     window.location.hash = "";
     window.location.reload();
   }
-});
+};
+
+menuDialog.onclose = (e) => {
+  startGame(Number(e.target.returnValue));
+};
 
 function gameOver() {
   document.body.classList.add("gameover");
@@ -606,7 +609,8 @@ function decodeLevel(levelString) {
 
       const stringValue = String(value);
 
-      const tower = { value, sign };
+      const tower = { value };
+      sign && (tower.sign = sign);
 
       if (stringValue === floorString) {
         return tower;
@@ -652,7 +656,7 @@ function generateLevel(towers) {
       floorValue = floor.value;
 
       ["e", "sign", "value"].forEach(
-        (prop) => floor[prop] && (towerFloor.dataset[prop] = floor[prop])
+        (prop) => prop in floor && (towerFloor.dataset[prop] = floor[prop])
       );
 
       if (!isFirstTower) {
@@ -705,16 +709,17 @@ function goToLevel(levelIndex) {
   document.body.dataset.t = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
+  document.scrollingElement.scrollTo(0, 0);
 }
 
-document.body.addEventListener("keydown", (e) => {
+document.body.onkeydown = (e) => {
   if (
     (e.key === "Enter" || e.key === " ") &&
     document.activeElement?.role === "button"
   ) {
     document.activeElement.click();
   }
-});
+};
 
 function startGame(levelIndex) {
   document.body.classList.add("walking");
@@ -737,7 +742,7 @@ function startGame(levelIndex) {
   document.body.addEventListener("transitionend", start, { once: true });
 }
 
-titleDialog.addEventListener("close", (e) => {
+titleDialog.onclose = (e) => {
   if (e.target.returnValue === "editor") {
     createFloor(createTower());
     createTower();
@@ -753,30 +758,25 @@ titleDialog.addEventListener("close", (e) => {
   if (lastReachedLevel === 0) {
     startGame(0);
   } else {
-    const totalLevels = levels.length;
     const menuFragment = document.createDocumentFragment();
 
-    for (let i = 0; i < totalLevels; i++) {
+    for (let i = 0; i < levels.length; i++) {
       const link = document.createElement("button");
-      link.innerHTML = i + 1;
+      link.value = i;
+      link.innerText = i + 1;
       link.className = "button";
       link.style.animationDelay = `${i * 10}ms`;
 
-      if (lastReachedLevel >= i) {
-        link.onclick = () => startGame(i);
-      } else {
-        link.disabled = true;
-      }
+      link.disabled = lastReachedLevel < i;
 
       menuFragment.append(link);
     }
 
-    levelList.append(menuFragment);
-
     document.body.dataset.s = "menu";
     menuDialog.showModal();
+    levelList.append(menuFragment);
   }
-});
+};
 
 const isSign = (t) => ["+", "-", "/", "*", "x"].includes(t);
 

@@ -27,6 +27,7 @@ body {
   transform: translateX(var(--scrollX));
   transition: transform 333ms ease-in, background-position 333ms ease-in;
   user-select: none;
+  overscroll-behavior-y: contain;
 }
 
 body[data-s="title"]::after,
@@ -43,6 +44,7 @@ body:not(.walking)
 
 #levelList {
   max-width: 1000px;
+  overflow-y: scroll;
 }
 
 #levelList::-webkit-scrollbar {
@@ -469,7 +471,6 @@ dialog .title,
 #endLevelDialog .title,
 dialog p span {
   --init-y: -100vh;
-  --init-y: -100dvh;
   transform: translateY(var(--init-y));
   animation: gameOverLetter 800ms cubic-bezier(0.29, 0.76, 0.56, 1.33) 1;
   animation-fill-mode: forwards;
@@ -500,8 +501,8 @@ section,
   display: inline-block;
 }
 
-#endLevelDialog.end:not(.custom) .title {
-  margin: 0;
+.title {
+  margin: 0 0 8px 0;
 }
 
 #gameEndMessage span {
@@ -518,7 +519,6 @@ section,
 
 dialog button {
   --init-y: 100vh;
-  --init-y: 100dvh;
   transform: translateY(var(--init-y));
   animation: gameOverLetter 800ms ease-in 1;
   animation-fill-mode: forwards;
@@ -589,10 +589,6 @@ dialog button {
 [data-s="menu"] #menu,
 [data-s="editor"] #editor {
   display: block;
-}
-
-#title {
-  padding-top: 25px;
 }
 
 aside {
@@ -692,9 +688,14 @@ aside td {
     padding-top: 8px;
   }
 
+  #titleDialog,
+  #menuDialog {
+    margin-top: 48px;
+  }
+
   dialog .title,
   dialog p {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 
   #gameEndMessage {
@@ -714,22 +715,12 @@ aside td {
     padding: 4px;
   }
 
-  .title {
-    margin: 0;
-  }
-
   #soundButton {
     position: relative;
     left: 4px;
     right: 0;
     top: 0;
     transform: none;
-  }
-
-  #levelList {
-    overflow-y: scroll;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
   }
 }
 
