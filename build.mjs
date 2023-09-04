@@ -15,7 +15,10 @@ import { zip, COMPRESSION_LEVEL } from "zip-a-folder";
 
   let styleCSS = fs.readFileSync("./style.css", "utf8");
 
-  let indexJS = fs.readFileSync("./index.js", "utf8");
+  let indexJS = fs
+    .readFileSync("./index.js", "utf8")
+    .replaceAll("const ", "let ")
+    .replaceAll("undefined", "void 0");
 
   console.log("Minify JS...");
   const minifiedJS = await minify.js(indexJS);
