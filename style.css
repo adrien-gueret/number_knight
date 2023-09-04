@@ -199,6 +199,7 @@ body:not(.walking)
   bottom: 8px;
   transform: scale(2);
   z-index: 1;
+  color: transparent;
 }
 
 aside .element {
@@ -446,6 +447,10 @@ dialog {
   overflow: visible;
   text-align: center;
   z-index: 100;
+}
+
+dialog::backdrop {
+  background-color: transparent;
 }
 
 #game dialog::backdrop {

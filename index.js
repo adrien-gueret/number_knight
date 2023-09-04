@@ -150,8 +150,6 @@ const playSound = (soundFn) => {
 
 const getPlaySound = (fn) => () => playSound(fn);
 
-window.playThunderSound = getPlaySound(winSound);
-
 const toggleSound = (forcedValue) => {
   const newValue = forcedValue === undefined ? !soundsEnabled : forcedValue;
 
@@ -267,8 +265,8 @@ endLevelDialog.onclose = () => {
   if (levels[nextIndex]) {
     goToLevel(nextIndex);
   } else {
-    window.location.hash = "";
-    window.location.reload();
+    location.hash = "";
+    location.reload();
   }
 };
 
@@ -283,7 +281,7 @@ function gameOver() {
 
   playerDom.classList.add("dead");
 
-  window.setTimeout(() => {
+  setTimeout(() => {
     playSound(playerDieSound);
     gameOverDialog.showModal();
   }, 500);
@@ -332,14 +330,14 @@ function explodeTowerFloor(floor) {
 
         piece.style.transform = `translateX(var(--x)) translateY(var(--y)) scale(${randScale}) skew(${randSkew}deg) rotateZ(${randDeg}deg)`;
 
-        const timer = window.setInterval(() => {
+        const timer = setInterval(() => {
           const ux = Math.cos(theta) * v * direction;
           const uy = Math.sin(theta) * v - -g * t;
 
           const nx = ux * t;
           const ny = uy * t + 0.5 * g * Math.pow(t, 2);
 
-          window.requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
             piece.style.setProperty("--x", nx + "px");
             piece.style.setProperty("--y", -ny + "px");
           });
@@ -408,7 +406,7 @@ function attackTowerFloor(e) {
       const success = isPotion || isAttackSuccess(value, element);
 
       hit.addEventListener("animationend", () => {
-        window.setTimeout(
+        setTimeout(
           () => {
             hit.remove();
 
@@ -516,7 +514,7 @@ function attackTowerFloor(e) {
               const nextTower = c.querySelector(".current+.tower");
 
               if (nextTower === null) {
-                window.setTimeout(() => {
+                setTimeout(() => {
                   const lastLevel = getLastReachedLevel();
 
                   if (!isCustomLevel) {
@@ -954,11 +952,11 @@ ce.onclick = (e) => {
   updateEditorUICode();
 };
 
-if (window.location.hash) {
+if (location.hash) {
   isCustomLevel = true;
-  startGame(window.location.hash.substring(1));
+  startGame(location.hash.substring(1));
 } else {
   titleDialog.showModal();
 }
 
-window.onhashchange = () => window.location.reload();
+window.onhashchange = () => location.reload();
