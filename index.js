@@ -53,9 +53,10 @@ const levels = [
   "22t+28m_40a_40spt20wa_5sp_+20mt100",
   "23ft+30mpt+17mpt/2mft+10matx2mftx2mat/2mft119",
   "24t10f_6a_+10mpt-6mf_10wp_10sat+10m_90_20w",
-  "25t+40mf_+40ma_+40mp_30wft100w_+80pm_+80amt-1000m",
+  "25t+40mf_+40ma_+40mp_30wft100wp_+80pm_+80amt-1000m",
   "26t-8mp_-8m_-8mf_-8mat3p",
   "27t-20mp_15sa_-10mf_6wp_6sp_6wft-30ma",
+  "28ft1f_+1mf_13s_30wa_14at90_/2m_90wt-100mf_+10mp_180ft360p",
   "999t1",
 ];
 const t = (i, n) => (n - i) / n;
