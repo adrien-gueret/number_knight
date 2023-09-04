@@ -898,7 +898,7 @@ const createFloor = (tower) => {
   floor.dataset.type = "b";
   floor.dataset.sign = "+";
   floor.className = "tower-floor b";
-  floor.innerHTML = `<button class="d">❌</button><div class="floor-value"><span class="sign" contenteditable>+</span><span class="value" contenteditable>10</span></div><div role="button" tabindex="1" class="character"></div><div role="button" tabindex="1" class="element none">◆</div>`;
+  floor.innerHTML = `<button class="d">❌</button><div class="floor-value"><span class="sign" contenteditable>+</span><span class="value" contenteditable>10</span></div><div role="button" tabindex="1" class="character"></div><div role="button" tabindex="1" class="e none">◆</div>`;
   tower.firstChild.after(floor);
 };
 
@@ -929,7 +929,7 @@ ce.onclick = (e) => {
     }
   };
 
-  next("element", ["none", "f", "a", "p"], "e", e.target, "element");
+  next("e", ["none", "f", "a", "p"], "e", e.target, "e");
 
   next(
     "character",
