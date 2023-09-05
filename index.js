@@ -81,21 +81,20 @@ const buttonSound = (i) => {
 const playerDieSound = (i) => {
   i = Math.pow(i, 0.96) * 1.3;
   const n = 9e4;
-  if (i > n) return null;
-  return (
-    ((i + Math.sin(i / 1900) * 80) & 128 ? 0.05 : -0.05) * Math.pow(t(i, n), 5)
-  );
+  return i > n
+    ? null
+    : ((i + Math.sin(i / 1900) * 80) & 128 ? 0.05 : -0.05) *
+        Math.pow(t(i, n), 5);
 };
 
 const hitSound = (i) => {
   var n = 3e3;
-  if (i > n) return null;
-  return (
-    3 *
-    Math.sin(i / 100 - Math.sin(i / 10) * Math.sin(i / 100)) *
-    Math.cos(Math.random()) *
-    t(i, n)
-  );
+  return i > n
+    ? null
+    : 3 *
+        Math.sin(i / 100 - Math.sin(i / 10) * Math.sin(i / 100)) *
+        Math.cos(Math.random()) *
+        t(i, n);
 };
 
 const winSound = (i) => {
@@ -125,11 +124,10 @@ const drinkSound = (i) => {
 
 const destroyTowerSound = (i) => {
   const n = 5e4;
-  if (i > n) return null;
-  return (
-    (Math.pow(i + Math.sin(i * 0.03) * 100, 0.6) & 20 ? 0.1 : -0.1) *
-    Math.pow(t(i, n), 2)
-  );
+  return i > n
+    ? null
+    : (Math.pow(i + Math.sin(i * 0.03) * 100, 0.6) & 20 ? 0.1 : -0.1) *
+        Math.pow(t(i, n), 2);
 };
 
 let soundsEnabled = false;
