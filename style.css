@@ -314,11 +314,11 @@ section:not(#editor) .e {
   background-position: -16px -32px;
 }
 
-.hit.drink + .hit-modifier {
+.hit.drink + .hit-m {
   top: -2px;
 }
 
-.hit-modifier {
+.hit-m {
   --shadow: #fff;
   position: absolute;
   z-index: 4;

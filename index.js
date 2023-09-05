@@ -333,11 +333,10 @@ function explodeTowerFloor(floor) {
           const ux = Math.cos(theta) * v * direction;
           const uy = Math.sin(theta) * v - -g * t;
 
-          const nx = ux * t;
           const ny = uy * t + 0.5 * g * Math.pow(t, 2);
 
           requestAnimationFrame(() => {
-            piece.style.setProperty("--x", nx + "px");
+            piece.style.setProperty("--x", ux * t + "px");
             piece.style.setProperty("--y", -ny + "px");
           });
 
@@ -398,7 +397,7 @@ function attackTowerFloor(e) {
 
       if (multipler !== 1) {
         hitMultipler = document.createElement("div");
-        hitMultipler.className = "hit-modifier";
+        hitMultipler.className = "hit-m";
         hitMultipler.innerHTML = multipler === 2 ? "x2" : "/2";
       }
 
@@ -415,11 +414,7 @@ function attackTowerFloor(e) {
 
             if (!success) {
               gameOver();
-
-              return;
-            }
-
-            if (isPotion) {
+            } else if (isPotion) {
               const modifierValue = value * multipler;
 
               playerValue = Math.floor(
@@ -710,7 +705,7 @@ function goToLevel(levelIndex) {
 
 document.body.onkeydown = (e) => {
   if (
-    (e.key === "Enter" || e.key === " ") &&
+    ["Enter", " "].includes(e.key) &&
     document.activeElement?.role === "button"
   ) {
     document.activeElement.click();
