@@ -162,12 +162,12 @@ const toggleSound = (forcedValue) => {
 
   if (soundsEnabled) {
     playBackgroundMusic();
-  } else {
-    backgroundMusicOscillators.forEach((oscillator) => {
-      oscillator.onended = null;
-      oscillator.stop();
-    });
+    return;
   }
+  backgroundMusicOscillators.forEach((oscillator) => {
+    oscillator.onended = null;
+    oscillator.stop();
+  });
 };
 soundButton.onclick = () => toggleSound();
 
@@ -442,26 +442,25 @@ function attackTowerFloor(e) {
             if (!isLastFloor) {
               if (floor.classList.contains("w")) {
                 for (let uFloor of tower.querySelectorAll(".tower-floor")) {
-                  if (uFloor === floor) {
-                    continue;
+                  if (uFloor !== floor) {
+                    const uFloorSign = uFloor.dataset.sign;
+
+                    const newFloorValue =
+                      value +
+                      Number(uFloor.dataset.value) *
+                        (uFloorSign === "-" ? -1 : 1);
+
+                    const absNewFloorValue = Math.abs(newFloorValue);
+
+                    if (uFloorSign === "-" && newFloorValue >= 0) {
+                      uFloor.dataset.sign = "+";
+                    }
+
+                    uFloor.dataset.value = absNewFloorValue;
+                    uFloor.querySelector(".floor-value").innerHTML = `${
+                      uFloor.dataset.sign ?? ""
+                    }${absNewFloorValue}`;
                   }
-
-                  const uFloorSign = uFloor.dataset.sign;
-                  const uFloorValue = uFloor.dataset.value;
-
-                  const newFloorValue =
-                    value + Number(uFloorValue) * (uFloorSign === "-" ? -1 : 1);
-
-                  const absNewFloorValue = Math.abs(newFloorValue);
-
-                  if (uFloorSign === "-" && newFloorValue >= 0) {
-                    uFloor.dataset.sign = "+";
-                  }
-
-                  uFloor.dataset.value = absNewFloorValue;
-                  uFloor.querySelector(".floor-value").innerHTML = `${
-                    uFloor.dataset.sign ?? ""
-                  }${absNewFloorValue}`;
                 }
               }
 
@@ -586,10 +585,10 @@ function decodeLevel(levelString) {
     p: "e",
     a: "e",
     f: "e",
-    b: "type",
-    s: "type",
-    w: "type",
-    m: "type",
+    b: "t",
+    s: "t",
+    w: "t",
+    m: "t",
   };
 
   return towers.map((towerString) => {
@@ -606,21 +605,21 @@ function decodeLevel(levelString) {
 
       const stringValue = String(value);
 
-      const tower = { value };
-      sign && (tower.sign = sign);
+      const towerFloor = { value };
+      sign && (towerFloor.sign = sign);
 
       if (stringValue === floorString) {
-        return tower;
+        return towerFloor;
       }
 
       const modifiers = floorString.substring(stringValue.length);
       modifiers.split("").forEach((modifier) => {
         if (modifier in modifiersToProp) {
-          tower[modifiersToProp[modifier]] = modifier;
+          towerFloor[modifiersToProp[modifier]] = modifier;
         }
       });
 
-      return tower;
+      return towerFloor;
     });
   });
 }
@@ -657,7 +656,7 @@ function generateLevel(towers) {
       );
 
       if (!isFirstTower) {
-        towerFloor.classList.add(floor.type ?? "b");
+        towerFloor.classList.add(floor.t ?? "b");
       }
 
       const floorValueDom = document.createElement("div");
