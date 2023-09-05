@@ -61,6 +61,7 @@ const levels = [
   "26t-8mp_-8m_-8mf_-8mat3p",
   "27t-20mp_15sa_-10mf_6wp_6sp_6wft-30ma",
   "28ft1f_+1mf_13s_30wa_14at90_/2m_90wt-100mf_+10mp_180ft360p",
+  "29t+1mf_+1ma_+1mpt+35ma_35bpt1b_-140mat-30mp_30wa_30sft35bp",
   "999t1",
 ];
 const t = (i, n) => (n - i) / n;
