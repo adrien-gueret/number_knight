@@ -1,8 +1,12 @@
+const d = document;
+const b = d.body;
+const cr = d.createElement.bind(d);
+
 const styleSheet = s.sheet;
 
 let selectors = [];
 
-for (let tuto of document.querySelectorAll("[data-t]")) {
+for (let tuto of d.querySelectorAll("[data-t]")) {
   selectors.push(
     `body[data-t="${tuto.dataset.t}"] aside[data-t="${tuto.dataset.t}"]`
   );
@@ -15,7 +19,7 @@ styleSheet.insertRule(
 
 let isCustomLevel = false;
 
-for (let text of document.querySelectorAll(".split")) {
+for (let text of d.querySelectorAll(".split")) {
   text.innerHTML = `<span>${text.textContent
     .trim()
     .split("")
@@ -273,8 +277,6 @@ menuDialog.onclose = (e) => {
   startGame(Number(e.target.returnValue));
 };
 
-const b = document.body;
-
 function gameOver() {
   b.classList.add("gameover");
   b.classList.remove("attacking");
@@ -307,7 +309,7 @@ function explodeTowerFloor(floor) {
   return new Promise((resolve) => {
     for (let x = 0; x < towerSize; x += pieceSize) {
       for (let y = 0; y < towerSize; y += pieceSize) {
-        const piece = document.createElement("div");
+        const piece = cr("div");
         piece.className = "tower-floor destroying piece";
 
         piece.style.setProperty("--initialX", `${x}px`);
@@ -386,7 +388,7 @@ function attackTowerFloor(e) {
   playerDom.addEventListener(
     "transitionend",
     () => {
-      const hit = document.createElement("div");
+      const hit = cr("div");
       hit.className = `hit${isPotion ? " drink" : ""}`;
       hit.style.setProperty(
         "--rotate",
@@ -398,7 +400,7 @@ function attackTowerFloor(e) {
       let hitMultipler;
 
       if (multipler !== 1) {
-        hitMultipler = document.createElement("div");
+        hitMultipler = cr("div");
         hitMultipler.className = "hit-m";
         hitMultipler.innerHTML = multipler === 2 ? "x2" : "/2";
       }
@@ -416,7 +418,10 @@ function attackTowerFloor(e) {
 
             if (!success) {
               gameOver();
-            } else if (isPotion) {
+              return;
+            }
+
+            if (isPotion) {
               const modifierValue = value * multipler;
 
               playerValue = Math.floor(
@@ -489,9 +494,7 @@ function attackTowerFloor(e) {
               b.classList.remove("attacking");
               isAttacking = false;
 
-              document
-                .querySelector(".tower.current")
-                .classList.remove("current");
+              d.querySelector(".tower.current").classList.remove("current");
 
               delete playerDom.parentNode.dataset.e;
 
@@ -629,7 +632,7 @@ function generateLevel(towers) {
   b.style.setProperty("--scrollX", "0px");
 
   towers.forEach((towerFloors, towerIndex) => {
-    const tower = document.createElement("div");
+    const tower = cr("div");
     tower.className = "tower";
     const isFirstTower = towerIndex === 0;
 
@@ -638,7 +641,7 @@ function generateLevel(towers) {
     }
 
     towerFloors.forEach((floor, floorIndex) => {
-      const towerFloor = document.createElement("div");
+      const towerFloor = cr("div");
       towerFloor.role = "button";
       towerFloor.tabIndex = towerIndex === 1 ? 1 : -1;
       towerFloor.className = "tower-floor";
@@ -656,13 +659,13 @@ function generateLevel(towers) {
         towerFloor.classList.add(floor.t ?? "b");
       }
 
-      const floorValueDom = document.createElement("div");
+      const floorValueDom = cr("div");
       floorValueDom.innerHTML = `${floor.sign ?? ""}${floorValue}`;
       floorValueDom.className = "floor-value";
       towerFloor.append(floorValueDom);
       tower.append(towerFloor);
 
-      const character = document.createElement("div");
+      const character = cr("div");
       character.className = "character";
       character.style.animationDelay =
         Math.random() * 100 * (towerIndex + 1) * (floorIndex + 1) + "ms";
@@ -702,15 +705,12 @@ function goToLevel(levelIndex) {
   b.dataset.t = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
-  document.scrollingElement.scrollTo(0, 0);
+  d.scrollingElement.scrollTo(0, 0);
 }
 
 b.onkeydown = (e) => {
-  if (
-    ["Enter", " "].includes(e.key) &&
-    document.activeElement?.role === "button"
-  ) {
-    document.activeElement.click();
+  if (["Enter", " "].includes(e.key) && d.activeElement?.role === "button") {
+    d.activeElement.click();
   }
 };
 
@@ -751,10 +751,10 @@ titleDialog.onclose = (e) => {
   if (lastReachedLevel === 0) {
     startGame(0);
   } else {
-    const menuFragment = document.createDocumentFragment();
+    const menuFragment = d.createDocumentFragment();
 
     for (let i = 0; i < levels.length; i++) {
-      const link = document.createElement("button");
+      const link = cr("button");
       link.value = i;
       link.innerText = i + 1;
       link.className = "button";
@@ -835,8 +835,8 @@ const getCustomLevelCode = () => {
 };
 
 const updateEditorUICode = () => {
-  cu.value = `${document.location.origin}${
-    document.location.pathname
+  cu.value = `${d.location.origin}${
+    d.location.pathname
   }#${getCustomLevelCode()}`;
   ca.href = cu.value;
 };
@@ -880,7 +880,7 @@ ce.onkeydown = (e) => {
 };
 
 const createTower = () => {
-  const tower = document.createElement("div");
+  const tower = cr("div");
   tower.className = "tower";
   tower.innerHTML = `<div role="button" tabindex="1" class="tower-floor ghost"><div class="floor-value">+</div></div>`;
   ce.append(tower);
@@ -888,7 +888,7 @@ const createTower = () => {
 };
 
 const createFloor = (tower) => {
-  const floor = document.createElement("div");
+  const floor = cr("div");
   floor.dataset.e = "none";
   floor.dataset.type = "b";
   floor.dataset.sign = "+";
