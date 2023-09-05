@@ -273,9 +273,11 @@ menuDialog.onclose = (e) => {
   startGame(Number(e.target.returnValue));
 };
 
+const b = document.body;
+
 function gameOver() {
-  document.body.classList.add("gameover");
-  document.body.classList.remove("attacking");
+  b.classList.add("gameover");
+  b.classList.remove("attacking");
   isAttacking = false;
 
   playerDom.classList.add("dead");
@@ -472,7 +474,7 @@ function attackTowerFloor(e) {
               playerDom.addEventListener(
                 "transitionend",
                 () => {
-                  document.body.classList.remove("attacking");
+                  b.classList.remove("attacking");
                   isAttacking = false;
                   if (playerValue <= 0) {
                     gameOver();
@@ -484,7 +486,7 @@ function attackTowerFloor(e) {
             } else {
               // Move player to next tower
               floor.innerHTML = "";
-              document.body.classList.remove("attacking");
+              b.classList.remove("attacking");
               isAttacking = false;
 
               document
@@ -525,7 +527,7 @@ function attackTowerFloor(e) {
                     },
                     { once: true }
                   );
-                  document.body.classList.add("walking");
+                  b.classList.add("walking");
                   floor.querySelector(".floor-value").style.visibility =
                     "hidden";
 
@@ -545,7 +547,7 @@ function attackTowerFloor(e) {
                   f.tabIndex = 1;
                 }
 
-                document.body.style.setProperty(
+                b.style.setProperty(
                   "--scrollX",
                   `-${192 * c.querySelectorAll(".tower-floor:empty").length}px`
                 );
@@ -566,7 +568,7 @@ function attackTowerFloor(e) {
     { once: true }
   );
 
-  document.body.classList.add("attacking");
+  b.classList.add("attacking");
   playerDom.style.transform = `scale(4) translate(${x}px, ${y}px)`;
 }
 
@@ -621,10 +623,10 @@ function decodeLevel(levelString) {
 
 function generateLevel(towers) {
   isAttacking = false;
-  document.body.classList.remove("gameover", "attacking");
+  b.classList.remove("gameover", "attacking");
 
   c.innerHTML = "";
-  document.body.style.setProperty("--scrollX", "0px");
+  b.style.setProperty("--scrollX", "0px");
 
   towers.forEach((towerFloors, towerIndex) => {
     const tower = document.createElement("div");
@@ -689,7 +691,7 @@ function getLastReachedLevel() {
 }
 
 function goToLevel(levelIndex) {
-  document.body.classList.remove("walking");
+  b.classList.remove("walking");
   currentLevelIndex = levelIndex;
 
   if (!Number.isInteger(levelIndex)) {
@@ -697,13 +699,13 @@ function goToLevel(levelIndex) {
     return;
   }
 
-  document.body.dataset.t = levelIndex;
+  b.dataset.t = levelIndex;
 
   generateLevel(decodeLevel(levels[levelIndex]));
   document.scrollingElement.scrollTo(0, 0);
 }
 
-document.body.onkeydown = (e) => {
+b.onkeydown = (e) => {
   if (
     ["Enter", " "].includes(e.key) &&
     document.activeElement?.role === "button"
@@ -713,14 +715,14 @@ document.body.onkeydown = (e) => {
 };
 
 function startGame(levelIndex) {
-  document.body.classList.add("walking");
+  b.classList.add("walking");
 
   const start = () => {
-    document.body.style.display = "none";
-    document.body.offsetHeight;
-    document.body.style.display = "block";
+    b.style.display = "none";
+    b.offsetHeight;
+    b.style.display = "block";
 
-    document.body.dataset.s = "game";
+    b.dataset.s = "game";
 
     goToLevel(levelIndex);
   };
@@ -730,7 +732,7 @@ function startGame(levelIndex) {
     return;
   }
 
-  document.body.addEventListener("transitionend", start, { once: true });
+  b.addEventListener("transitionend", start, { once: true });
 }
 
 titleDialog.onclose = (e) => {
@@ -738,7 +740,7 @@ titleDialog.onclose = (e) => {
     createFloor(createTower());
     createTower();
     updateEditorUICode();
-    document.body.dataset.s = "editor";
+    b.dataset.s = "editor";
     return;
   }
 
@@ -763,7 +765,7 @@ titleDialog.onclose = (e) => {
       menuFragment.append(link);
     }
 
-    document.body.dataset.s = "menu";
+    b.dataset.s = "menu";
     menuDialog.showModal();
     levelList.append(menuFragment);
   }
