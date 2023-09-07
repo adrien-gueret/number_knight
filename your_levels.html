@@ -189,6 +189,22 @@
 
       <div class="with-level">
         <p class="dialogText" id="totalSaved"></p>
+        <p class="dialogText">
+          <label>
+            <small>
+              Share this link to let someone play <b>ALL</b> your levels!</small
+            >
+
+            <input
+              style="font-size: 0.75rem; min-width: 200px"
+              class="input"
+              id="allLevelsLink"
+              readonly
+              type="text"
+              onClick="this.select();"
+            />
+          </label>
+        </p>
       </div>
 
       <nav id="levelList"></nav>
@@ -204,7 +220,7 @@
             class="dialogText"
             style="margin-right: 16px"
           >
-            Direct link to your level
+            Direct link to this level
           </label>
           <input
             class="input"
@@ -364,7 +380,16 @@
           }.<br /><small><em>It may take some times to update this list, if something feels wrong try to refresh it!</em></small>`;
           const menuFragment = document.createDocumentFragment();
 
+          const allLevelCodes = [];
+
+          const rootURL = window.opener
+            ? `${window.opener.location.origin}${window.opener.location.pathname}`
+            : window.location.origin;
+
           levels.rows.forEach((level, i) => {
+            if (!level.metadata.keyvalues.levelCode) {
+              return;
+            }
             const link = document.createElement("button");
             link.type = "button";
             const small = document.createElement("small");
@@ -376,11 +401,7 @@
               e.preventDefault();
               levelDetailsName.textContent = level.metadata.keyvalues.levelName;
 
-              const rootURL = window.opener
-                ? `${window.opener.location.origin}${window.opener.location.pathname}`
-                : window.location.origin;
-
-              const levelURL = `${rootURL}#${level.metadata.keyvalues.levelCode}`;
+              const levelURL = `${rootURL}?p=${level.metadata.keyvalues.levelCode}`;
               levelDetailsPlayLink.href = levelURL;
               levelDetailsCode.value = levelURL;
 
@@ -397,9 +418,12 @@
               levelDetailsDialog.showModal();
             };
 
+            allLevelCodes.push(level.metadata.keyvalues.levelCode);
+
             menuFragment.append(link);
           });
-
+          console.log(allLevelCodes);
+          allLevelsLink.value = `${rootURL}?p=${allLevelCodes.join("&p=")}`;
           levelList.append(menuFragment);
           yourLevelList.classList.remove("no-level");
         }
