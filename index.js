@@ -94,7 +94,7 @@
     const note = notes[((notes.length * i) / n) | 0];
     if (note === undefined) return 0;
     const q = t((i * notes.length) % n, n);
-    return (i * (Math.pow(2, note / 12) * 0.8)) & 64 ? q : -q;
+    return (i * (Math.pow(2, note / 12) * 0.8)) & 128 ? q : -q;
   };
 
   const drinkSound = (i) => {
