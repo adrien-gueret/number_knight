@@ -420,11 +420,11 @@
               levelDetailsDialog.showModal();
             };
 
-            allLevelCodes.push(level.metadata.keyvalues.levelCode);
+            allLevelCodes.unshift(level.metadata.keyvalues.levelCode);
 
             menuFragment.append(link);
           });
-          console.log(allLevelCodes);
+
           allLevelsLink.value = `${rootURL}?p=${allLevelCodes.join("&p=")}`;
           levelList.append(menuFragment);
           yourLevelList.classList.remove("no-level");
