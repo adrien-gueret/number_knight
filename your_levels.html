@@ -321,6 +321,9 @@
       }
 
       async function saveOnPinata(levelName, levelCode) {
+        if (!levelCode) {
+          throw new Error("No level code");
+        }
         const file = new File([levelCode], "number-knight-levels.txt", {
           type: "text/plain",
         });
