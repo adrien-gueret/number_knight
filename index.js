@@ -833,7 +833,7 @@
 
     cu.value = `${origin}${pathname}?p=${code}`;
     ca.href = cu.value;
-    cs.href = `${origin}/your_levels.html#${code}`;
+    cs.href = `https://adrien-gueret.github.io/number_knight/your_levels.html#${code}`;
   };
 
   const formatValue = (domNode) => {
