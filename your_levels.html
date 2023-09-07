@@ -181,7 +181,10 @@
           >
         </p>
         <p>
-          <a id="editorLink" href="./?e" class="button"
+          <a
+            id="editorLink"
+            href="https://adrien-gueret.github.io/number_knight/?e"
+            class="button"
             ><small>Let's create one!</small></a
           >
         </p>
@@ -231,7 +234,7 @@
           />
         </p>
         <p>
-          <a id="levelDetailsPlayLink" target="_blank" class="button">Play</a
+          <a id="levelDetailsPlayLink" target="_blank" class="button">Play ⭷</a
           ><br />
           <button class="button"><small>Back</small></button><br />
           <button id="levelDetailsDelete" class="button danger">
@@ -352,10 +355,6 @@
         return response;
       }
 
-      if (window.opener) {
-        editorLink.href = `${window.opener.location.origin}${window.opener.location.pathname}?e`;
-      }
-
       const cancelAction = () => {
         if (window.opener) {
           window.close();
@@ -383,7 +382,7 @@
           const allLevelCodes = [];
 
           const rootURL = window.opener
-            ? `${window.opener.location.origin}${window.opener.location.pathname}`
+            ? "https://adrien-gueret.github.io/number_knight"
             : window.location.origin;
 
           levels.rows.forEach((level, i) => {
