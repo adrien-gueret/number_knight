@@ -24,7 +24,7 @@
     text.innerHTML = `<span>${text.textContent
       .trim()
       .split("")
-      .join("</span><span>")}</span>`.replaceAll(/ /g, "&nbsp;");
+      .join("</span><span>")}</span>`.replace(/ /g, "&nbsp;");
 
     let i = 0;
 
