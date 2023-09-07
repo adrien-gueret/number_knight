@@ -65,22 +65,8 @@
     "29t+1mf_+1ma_+1mpt+35ma_35bpt1b_-140mat-30mp_30wa_30sft35bp",
     "999t1",
   ];
+  let levelsToUse = levels;
   const t = (i, n) => (n - i) / n;
-
-  const removeSound = (i) => {
-    i = i * 0.75;
-    const n = 1.3e4;
-    if (i > n) return null;
-    const q = Math.pow(t(i, n), 3.1) * 0.1;
-    return Math.pow(i, 1.08) & (i < n / 3 ? 98 : 99) ? q : -q;
-  };
-
-  const buttonSound = (i) => {
-    const n = 1e4;
-    if (i > n) return null;
-    const q = Math.pow(t(i, n), 2);
-    return Math.pow(i, 2) & (i < n / 3 ? 1.6 : 9.9) ? q : -q;
-  };
 
   const playerDieSound = (i) => {
     i = Math.pow(i, 0.96) * 1.3;
@@ -263,11 +249,10 @@
 
   endLevelDialog.onclose = () => {
     const nextIndex = currentLevelIndex + 1;
-    if (levels[nextIndex]) {
+    if (levelsToUse[nextIndex]) {
       goToLevel(nextIndex);
     } else {
-      location.hash = "";
-      location.reload();
+      location.href = location.origin + location.pathname;
     }
   };
 
@@ -532,13 +517,14 @@
                     floor.querySelector(".floor-value").style.visibility =
                       "hidden";
 
-                    const isGameEnd = currentLevelIndex === levels.length - 1;
+                    const isGameEnd =
+                      currentLevelIndex === levelsToUse.length - 1;
 
+                    endLevelDialog.classList.toggle("end", isGameEnd);
                     endLevelDialog.classList.toggle(
-                      "end",
-                      isGameEnd || isCustomLevel
+                      "hideEndMessage",
+                      levelsToUse.length < 2
                     );
-                    endLevelDialog.classList.toggle("custom", isCustomLevel);
                     endLevelDialog.showModal();
                   }, 500);
                 } else {
@@ -702,9 +688,11 @@
       return;
     }
 
-    b.dataset.t = levelIndex;
+    if (!isCustomLevel) {
+      b.dataset.t = levelIndex;
+    }
 
-    generateLevel(decodeLevel(levels[levelIndex]));
+    generateLevel(decodeLevel(levelsToUse[levelIndex]));
     d.scrollingElement.scrollTo(0, 0);
   }
 
@@ -735,12 +723,16 @@
     b.addEventListener("transitionend", start, { once: true });
   }
 
+  const goToEditor = () => {
+    createFloor(createTower());
+    createTower();
+    updateEditorUICode();
+    b.dataset.s = "editor";
+  };
+
   titleDialog.onclose = (e) => {
     if (e.target.returnValue === "editor") {
-      createFloor(createTower());
-      createTower();
-      updateEditorUICode();
-      b.dataset.s = "editor";
+      goToEditor();
       return;
     }
 
@@ -835,10 +827,13 @@
   };
 
   const updateEditorUICode = () => {
-    cu.value = `${d.location.origin}${
-      d.location.pathname
-    }#${getCustomLevelCode()}`;
+    const origin = d.location.origin;
+    const pathname = d.location.pathname;
+    const code = getCustomLevelCode();
+
+    cu.value = `${origin}${pathname}?p=${code}`;
     ca.href = cu.value;
+    cs.href = `${origin}/your_levels.html#${code}`;
   };
 
   const formatValue = (domNode) => {
@@ -947,12 +942,15 @@
     updateEditorUICode();
   };
 
-  if (location.hash) {
+  const params = new URLSearchParams(location.search);
+
+  if (params.has("p")) {
     isCustomLevel = true;
-    startGame(location.hash.substring(1));
+    levelsToUse = params.getAll("p");
+    startGame(0);
+  } else if (params.has("e")) {
+    goToEditor();
   } else {
     titleDialog.showModal();
   }
-
-  window.onhashchange = () => location.reload();
 })();

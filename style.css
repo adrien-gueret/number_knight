@@ -490,7 +490,7 @@ dialog p span {
 
 #endLevelDialog .button span,
 #endLevelDialog:not(.end) #gameEndMessage,
-#endLevelDialog.custom #gameEndMessage,
+#endLevelDialog.hideEndMessage #gameEndMessage,
 .destroying .e,
 .destroying .d,
 section,
